@@ -1,4 +1,5 @@
 using System.IO;
+using System.Collections.Concurrent;
 using System.Speech.Synthesis;
 
 namespace ChatAvatar.Component.Featur.Avatar.Service;
@@ -14,7 +15,7 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
             .ToArray();
     }
 
-    public async Task<Stream> SynthesizeAsync(
+    public async Task<SpeechSynthesisResult> SynthesizeAsync(
         string text,
         string? voiceName,
         CancellationToken cancellationToken = default)
@@ -24,9 +25,24 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
 
         var synthesizer = new SpeechSynthesizer();
         var output = new MemoryStream();
+        var cues = new ConcurrentQueue<SpeechAnimationCue>();
         var completion = new TaskCompletionSource<SpeakCompletedEventArgs>(TaskCreationOptions.RunContinuationsAsynchronously);
         EventHandler<SpeakCompletedEventArgs> completedHandler = (_, eventArgs) => completion.TrySetResult(eventArgs);
+        EventHandler<PhonemeReachedEventArgs> phonemeHandler = (_, eventArgs) => cues.Enqueue(new SpeechAnimationCue(
+            eventArgs.AudioPosition,
+            eventArgs.Duration,
+            SpeechAnimationCueType.Phoneme,
+            phoneme: eventArgs.Phoneme,
+            nextPhoneme: eventArgs.NextPhoneme));
+        EventHandler<VisemeReachedEventArgs> visemeHandler = (_, eventArgs) => cues.Enqueue(new SpeechAnimationCue(
+            eventArgs.AudioPosition,
+            eventArgs.Duration,
+            SpeechAnimationCueType.Viseme,
+            viseme: eventArgs.Viseme,
+            nextViseme: eventArgs.NextViseme));
         synthesizer.SpeakCompleted += completedHandler;
+        synthesizer.PhonemeReached += phonemeHandler;
+        synthesizer.VisemeReached += visemeHandler;
 
         try
         {
@@ -52,7 +68,7 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
             }
 
             output.Position = 0;
-            return output;
+            return new SpeechSynthesisResult(output, new SpeechAnimationTrack(cues));
         }
         catch
         {
@@ -62,6 +78,8 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
         finally
         {
             synthesizer.SpeakCompleted -= completedHandler;
+            synthesizer.PhonemeReached -= phonemeHandler;
+            synthesizer.VisemeReached -= visemeHandler;
             synthesizer.Dispose();
         }
     }

@@ -16,7 +16,8 @@ Phasen 09 und 10.
 
 ## Akzeptanzkriterien
 
-- [ ] Für eine Testäußerung steht eine geordnete, zeitbezogene Animationsspur zur Verfügung.
-- [ ] Die Spur kann unabhängig von einer konkreten Avatar-Darstellung getestet werden.
-- [ ] Die Synchronisationsquelle und ihre Grenzen sind dokumentiert; es gibt keinen Online-Fallback.
-- [ ] Tests prüfen Reihenfolge, Zeitbezug und leere beziehungsweise nicht unterstützte Spuren.
+- [x] Für eine Testäußerung liefert System.Speech Phonem- und Visemereignisse mit Audiozeitstempel und Dauer.
+- [x] Ein rendererunabhängiger Track fasst beide Ereignistypen in Audiozeit-Reihenfolge zusammen.
+- [x] Die Trackmodelle sind unabhängig von der Avatar-Darstellung automatisiert getestet.
+- [x] Die Synchronisationsquelle, lokale Sprachvoraussetzung und Möglichkeit eines leeren Tracks sind dokumentiert; Online-Fallbacks gibt es nicht.
+- [x] Tests prüfen Sortierung, Zeitvalidierung und leere sowie reale lokale Spuren.

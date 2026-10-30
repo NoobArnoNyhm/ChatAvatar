@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace ChatAvatar.Component.Featur.Avatar.Service;
 
 public sealed class SpeechSynthesisService : ISpeechSynthesisService
@@ -12,7 +10,7 @@ public sealed class SpeechSynthesisService : ISpeechSynthesisService
         _engine = engine;
     }
 
-    public Task<Stream> SynthesizeAsync(
+    public Task<SpeechSynthesisResult> SynthesizeAsync(
         AvatarResponseRequest request,
         CancellationToken cancellationToken = default)
     {

@@ -13,11 +13,13 @@ public sealed class SpeechSynthesisServiceTests
         var service = new SpeechSynthesisService(engine);
         var request = new AvatarResponseRequest("Hello", new AvatarResponseSettings("Local Voice"));
 
-        using var stream = await service.SynthesizeAsync(request);
+        var result = await service.SynthesizeAsync(request);
 
         Assert.AreEqual("Hello", engine.LastText);
         Assert.AreEqual("Local Voice", engine.LastVoiceName);
-        Assert.AreEqual(4, stream.Length);
+        Assert.AreEqual(4, result.AudioStream.Length);
+        Assert.AreSame(SpeechAnimationTrack.Empty, result.AnimationTrack);
+        await result.AudioStream.DisposeAsync();
     }
 
     [TestMethod]
@@ -59,7 +61,8 @@ public sealed class SpeechSynthesisServiceTests
             Assert.Inconclusive("No local System.Speech voice is installed.");
         }
 
-        using var stream = await engine.SynthesizeAsync("Test speech", voices[0]);
+        var result = await engine.SynthesizeAsync("Test speech", voices[0]);
+        await using var stream = result.AudioStream;
         var header = new byte[4];
         var bytesRead = await stream.ReadAsync(header);
 
@@ -76,7 +79,7 @@ public sealed class SpeechSynthesisServiceTests
 
         public Exception? Failure { get; init; }
 
-        public Task<Stream> SynthesizeAsync(
+        public Task<SpeechSynthesisResult> SynthesizeAsync(
             string text,
             string? voiceName,
             CancellationToken cancellationToken = default)
@@ -86,11 +89,13 @@ public sealed class SpeechSynthesisServiceTests
 
             if (Failure is not null)
             {
-                return Task.FromException<Stream>(Failure);
+                return Task.FromException<SpeechSynthesisResult>(Failure);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult<Stream>(new MemoryStream([1, 2, 3, 4]));
+            return Task.FromResult(new SpeechSynthesisResult(
+                new MemoryStream([1, 2, 3, 4]),
+                SpeechAnimationTrack.Empty));
         }
     }
 }
