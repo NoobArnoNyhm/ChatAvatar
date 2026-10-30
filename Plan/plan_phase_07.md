@@ -16,7 +16,8 @@ Phase 02.
 
 ## Akzeptanzkriterien
 
-- [ ] Die WPF-Testanwendung zeigt die lokale WebView2-Seite an.
-- [ ] Die Seite enthält keine extern geladenen Ressourcen.
-- [ ] Ein fehlender oder nicht startbarer WebView2-Runtime wird verständlich gemeldet.
-- [ ] Der Start ist offline reproduzierbar und in der `README.md` dokumentiert.
+- [x] Die WPF-Testanwendung bindet das WebView2-Control mit einer lokalen HTML-Seite ein.
+- [x] Content Security Policy und Navigation-Guard verhindern externe Ressourcen und Navigationen.
+- [x] Fehlende Assets, WebView2-Initialisierungsfehler und Ladefehler werden sichtbar gemeldet.
+- [x] Das Asset wird in die Buildausgabe kopiert und seine lokale Verfügbarkeit automatisiert getestet.
+- [x] Offline-Voraussetzung und Einbindung sind in der `README.md` dokumentiert.
