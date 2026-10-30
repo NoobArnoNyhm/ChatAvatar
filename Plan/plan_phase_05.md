@@ -16,8 +16,8 @@ Phase 04.
 
 ## Akzeptanzkriterien
 
-- [ ] Ein Avatar kann gespeichert, erneut geladen und fachlich gleichwertig verglichen werden.
-- [ ] Beschädigte, unbekannte und nicht unterstützte Dateiversionen erzeugen kontrollierte Fehler.
-- [ ] Tests decken Rundlauf und mindestens einen Fehlerfall ab.
-- [ ] Der Dateizugriff bleibt auf explizit übergebene Pfade beschränkt.
-- [ ] Das Verhalten ist in der `README.md` dokumentiert.
+- [x] Avatare aller drei Typen können gespeichert und erneut geladen werden.
+- [x] Beschädigtes JSON, unbekannte Darstellungstypen und nicht unterstützte Dateiversionen erzeugen kontrollierte Fehler.
+- [x] Tests decken Rundlauf, Fehlerfälle und fehlende Dateien ab.
+- [x] Der Dateizugriff erfolgt ausschließlich über explizit übergebene Pfade.
+- [x] Verhalten und atomarer Schreibablauf sind in der `README.md` dokumentiert.

@@ -81,4 +81,4 @@ Avatar-Dateien verwenden ein JSON-Dokument mit `schemaVersion` und einem Avatar-
 }
 ```
 
-Das Domänenmodell validiert Identität, Name, Darstellungstyp und typbezogene Werte. Ein nicht unterstütztes Schema wird abgewiesen; Laden und Speichern einzelner Dateien folgen in Phase 05.
+Das Domänenmodell validiert Identität, Name, Darstellungstyp und typbezogene Werte. `AvatarDefinitionFileStore` lädt und speichert einzelne Dateien über explizit übergebene Pfade. Das Speichern erfolgt über eine temporäre Datei mit anschließendem Austausch, damit ein abgebrochener Schreibvorgang die vorherige Datei nicht teilweise überschreibt. Beschädigtes JSON, unbekannte Darstellungstypen und nicht unterstützte Schema-Versionen werden abgewiesen.

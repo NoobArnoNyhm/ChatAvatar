@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Text.Json.Serialization;
 
 namespace ChatAvatar.Component.Featur.Avatar.Service;
 
@@ -26,5 +27,6 @@ public sealed record AbstractAvatarAppearance : AvatarAppearance
 
     public float PulseIntensity { get; }
 
+    [JsonIgnore]
     public override AvatarKind Kind => AvatarKind.Abstract;
 }

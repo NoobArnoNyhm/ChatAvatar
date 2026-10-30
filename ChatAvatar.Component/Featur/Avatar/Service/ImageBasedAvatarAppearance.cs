@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace ChatAvatar.Component.Featur.Avatar.Service;
 
 public sealed record ImageBasedAvatarAppearance : AvatarAppearance
@@ -11,5 +13,6 @@ public sealed record ImageBasedAvatarAppearance : AvatarAppearance
 
     public string TextureAssetPath { get; }
 
+    [JsonIgnore]
     public override AvatarKind Kind => AvatarKind.ImageBased;
 }
