@@ -47,3 +47,17 @@ dotnet run --project ChatAvatar.TestApp/ChatAvatar.TestApp.csproj
 ```
 
 Das aktuelle Grundgerüst öffnet ein leeres WPF-Fenster. Die Avatar-Funktionen werden in den nachfolgenden Phasen ergänzt.
+
+## Integrationsvertrag
+
+Ein Chat-Host erstellt eine Anfrage aus Text und den von ihm verwalteten Avatar-Einstellungen. Der Dienst liefert sofort eine Session mit stabiler Antwort-ID; der Host kann auf deren Abschluss warten oder sie abbrechen. Die Komponente speichert diese Einstellungen nicht.
+
+```csharp
+var request = new AvatarResponseRequest(
+	"Hello",
+	new AvatarResponseSettings(VoiceName: "Local Voice", AvatarId: "avatar-1"));
+using var session = responseService.Start(request);
+var result = await session.Completion;
+```
+
+Die Session endet mit `Completed`, `Cancelled` oder `Failed`. Bei einem Fehler enthält das Ergebnis eine Meldung. Die Audio- und Avatar-Ausführung wird in den folgenden Phasen an diesen Vertrag angeschlossen.

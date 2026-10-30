@@ -16,8 +16,8 @@ Phase 01.
 
 ## Akzeptanzkriterien
 
-- [ ] Die öffentliche API ist mit einem kurzen Beispiel dokumentiert.
-- [ ] Die API kann einen Text entgegennehmen und einen Antwortvorgang identifizieren.
-- [ ] Fehler und Abbruch sind als eindeutige Zustände abbildbar.
-- [ ] Tests decken gültige Eingabe sowie leere Eingabe und Abbruch ab.
-- [ ] Die API ist in der `README.md` dokumentiert.
+- [x] Die öffentliche API ist mit einem kurzen Beispiel dokumentiert.
+- [x] Die API kann einen Text entgegennehmen und einen Antwortvorgang identifizieren.
+- [x] Fehler und Abbruch sind als eindeutige Zustände abbildbar.
+- [x] Tests decken gültige Eingabe sowie leere Eingabe und Abbruch ab.
+- [x] Die API ist in der `README.md` dokumentiert.
