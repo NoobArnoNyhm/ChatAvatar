@@ -16,8 +16,8 @@ Phasen 03 und 09.
 
 ## Akzeptanzkriterien
 
-- [ ] Ein synthetisierter Stream kann gestartet und bis zum Ende abgespielt werden.
-- [ ] Abbruch beendet die Wiedergabe und gibt zugehörige Ressourcen frei.
-- [ ] Der Host erhält eindeutige Zustandsübergänge.
-- [ ] Tests prüfen Abschluss, Abbruch und Wiedergabefehler.
-- [ ] Der Ablauf ist in der `README.md` dokumentiert.
+- [x] Ein WAV-Stream kann über `SystemSoundPlayerEngine` abgespielt werden.
+- [x] Abbruch stoppt die Wiedergabe; Stream und Player werden nach Abschluss oder Fehler freigegeben.
+- [x] Der Host erhält `Playing` und genau einen terminalen Zustand sowie ein Ergebnisobjekt.
+- [x] Tests prüfen Abschluss, Abbruch, Wiedergabefehler, Stream-Freigabe und einmaligen Start.
+- [x] Ablauf und Stream-Eigentümerschaft sind in der `README.md` dokumentiert.
