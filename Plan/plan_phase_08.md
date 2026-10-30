@@ -16,8 +16,8 @@ Phase 07.
 
 ## Akzeptanzkriterien
 
-- [ ] Die Szene rendert ein sichtbares 3D-Testobjekt.
-- [ ] Fenstergrößenänderungen passen die Darstellung an.
-- [ ] WPF kann eine definierte Initialisierungsnachricht senden.
-- [ ] Darstellung und Tests verwenden keine Netzwerkressourcen.
-- [ ] Die Einbindung ist in der `README.md` dokumentiert.
+- [x] Die lokale Three.js-Szene rendert ein animiertes 3D-Testobjekt.
+- [x] `ResizeObserver` passt Renderer und Kamera an Größenänderungen des WebView an.
+- [x] Ein versionierter JSON-Handshake sendet `Ready` und eine typisierte `Initialize`-Nachricht zwischen WebView2 und WPF.
+- [x] Three.js, HTML und JavaScript werden lokal geladen; externe Navigationen und Netzwerkverbindungen sind blockiert.
+- [x] Aufbau, lokaler virtueller Ursprung und Nachrichtenformat sind in der `README.md` dokumentiert.
