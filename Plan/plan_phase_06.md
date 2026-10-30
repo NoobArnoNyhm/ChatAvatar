@@ -16,7 +16,7 @@ Phase 05.
 
 ## Akzeptanzkriterien
 
-- [ ] Der Katalog listet gültige Avatare mit Identität, Name und Typ.
-- [ ] Ein Avatar kann anhand seiner Identität geladen werden.
-- [ ] Fehlerhafte Dateien verhindern nicht das Auflisten der übrigen gültigen Dateien.
-- [ ] Die Fälle sind automatisiert getestet und in der `README.md` beschrieben.
+- [x] Der Katalog listet gültige Avatare mit Identität, Name und Typ.
+- [x] Ein Avatar kann anhand seiner Identität aus dem übergebenen Verzeichnis geladen werden.
+- [x] Fehlerhafte Dateien verhindern nicht das Auflisten der übrigen gültigen Dateien.
+- [x] Speicherort, Dateimuster und Verhalten bei doppelten IDs sind automatisiert getestet und in der `README.md` beschrieben.

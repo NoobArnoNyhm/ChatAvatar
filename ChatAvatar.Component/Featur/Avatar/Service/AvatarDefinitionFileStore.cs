@@ -6,6 +6,8 @@ namespace ChatAvatar.Component.Featur.Avatar.Service;
 
 public sealed class AvatarDefinitionFileStore
 {
+    public const string FileExtension = ".avatar.json";
+
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
