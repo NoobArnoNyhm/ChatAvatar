@@ -61,3 +61,24 @@ var result = await session.Completion;
 ```
 
 Die Session endet mit `Completed`, `Cancelled` oder `Failed`. Bei einem Fehler enthält das Ergebnis eine Meldung. Die Audio- und Avatar-Ausführung wird in den folgenden Phasen an diesen Vertrag angeschlossen.
+
+## Avatar-Dateiformat
+
+Avatar-Dateien verwenden ein JSON-Dokument mit `schemaVersion` und einem Avatar-Modell. Version 1 unterscheidet die drei Darstellungsarten über typisierte Konfigurationen:
+
+```json
+{
+	"schemaVersion": 1,
+	"avatar": {
+		"id": "d8e6d6d3-0ca9-4c1c-82db-425e734f27bc",
+		"displayName": "Abstract Assistant",
+		"appearance": {
+			"kind": "abstract",
+			"lightColor": "#33AAFF",
+			"pulseIntensity": 0.65
+		}
+	}
+}
+```
+
+Das Domänenmodell validiert Identität, Name, Darstellungstyp und typbezogene Werte. Ein nicht unterstütztes Schema wird abgewiesen; Laden und Speichern einzelner Dateien folgen in Phase 05.

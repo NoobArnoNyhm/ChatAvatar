@@ -16,8 +16,8 @@ Phase 01.
 
 ## Akzeptanzkriterien
 
-- [ ] Jeder Avatar hat eine eindeutige Identität und genau einen unterstützten Typ.
-- [ ] Ungültige oder unbekannte Typen werden kontrolliert abgewiesen.
-- [ ] Das Dateiformat ist versioniert und mit einem Beispiel dokumentiert.
-- [ ] Fachregeln liegen im passenden Feature unter `Featur` und sind automatisiert getestet.
-- [ ] Das Modell und Format sind in der `README.md` dokumentiert.
+- [x] Jeder Avatar hat eine eindeutige Identität und genau einen unterstützten Typ.
+- [x] Ungültige Identitäten, Namen, typbezogene Werte und nicht unterstützte Schema-Versionen werden kontrolliert abgewiesen.
+- [x] Das JSON-Dateiformat ist versioniert und mit einem Beispiel dokumentiert.
+- [x] Fachregeln liegen im passenden Feature unter `Featur` und sind automatisiert getestet.
+- [x] Das Modell und Format sind in der `README.md` dokumentiert.
