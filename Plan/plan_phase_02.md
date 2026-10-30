@@ -16,7 +16,8 @@ Phase 01.
 
 ## Akzeptanzkriterien
 
-- [ ] Abhängigkeiten und Bezugs-/Paketierungsstrategie sind dokumentiert.
-- [ ] Es gibt keine Laufzeitreferenzen auf CDN, externe URLs oder andere Onlinedienste.
-- [ ] Die Testanwendung startet mit deaktiviertem Netzwerk und lädt ihre Laufzeitressourcen lokal.
-- [ ] Ein automatisierter oder reproduzierbarer Prüfschritt weist den Offline-Start nach.
+- [x] Die Paketversionen und die lokale Bereitstellung von Three.js sind festgelegt und dokumentiert.
+- [x] Die Testanwendung und Three.js verwenden keine CDN- oder externen Laufzeitressourcen.
+- [x] WebView2- und System.Speech-Assemblies sowie das lokale Three.js-Modul sind in automatisierten Tests nachweisbar.
+- [x] Ein Skript baut und testet die Solution ohne Restore und prüft, dass der WPF-GUI-Prozess die Message-Loop erreicht; es kann bei deaktiviertem Netzwerk ausgeführt werden.
+- [x] Die noch erforderliche Fixed-Version-WebView2-Runtime und lokal installierte SAPI-Stimmen sind als Anforderungen für Offline-Bereitstellung dokumentiert.

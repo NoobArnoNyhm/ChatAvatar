@@ -20,6 +20,18 @@ Die fachliche Logik wird nach DDD-Grenzen in `Featur` organisiert. Services und 
 - Windows
 - .NET 10 SDK
 
+## Offline-Abhängigkeiten
+
+Die Laufzeit darf keine CDN- oder sonstigen Online-Ressourcen laden. Die WebView2-SDK- und System.Speech-Paketversionen sind in `ChatAvatar.Component.csproj` festgelegt. Three.js 0.187.0 liegt als lokale Datei unter `ChatAvatar.Component/Assets/ThreeJs/three.module.js`; die MIT-Lizenz liegt daneben. Die Datei wird in die Buildausgabe kopiert. Ein Test prüft die lokale Verfügbarkeit der SDK-Assemblies und des Three.js-Moduls.
+
+Für die spätere Offline-Verteilung muss zusätzlich eine passende Fixed-Version-WebView2-Runtime mit dem Anwendungspaket ausgeliefert werden; die auf einem Entwicklungsrechner installierte Evergreen-Runtime ist kein Ersatz dafür. Auch die von System.Speech verwendete Stimme muss lokal auf dem Zielsystem verfügbar sein. Paketierung und Offline-Installation werden in Phase 23 umgesetzt.
+
+Nach einem initialen NuGet-Restore kann der Build-, Test- und WPF-Startcheck bei deaktiviertem Netzwerk ausgeführt werden. Der Check prüft, dass der GUI-Prozess die Message-Loop erreicht:
+
+```powershell
+./scripts/Test-OfflineStartup.ps1
+```
+
 ## Build und Tests
 
 Im Repository-Stammverzeichnis ausführen:
