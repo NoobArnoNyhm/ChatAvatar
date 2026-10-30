@@ -13,8 +13,8 @@ Eine baubare .NET-10-Lösung mit klaren Projektgrenzen und den im Projekt festge
 
 ## Akzeptanzkriterien
 
-- [ ] Alle Projekte zielen auf .NET 10 und bauen erfolgreich.
-- [ ] Die Testanwendung startet mit einem leeren, funktionsfähigen WPF-Fenster.
-- [ ] Tests liegen in einem separaten Testprojekt; ein Beispieltest läuft.
-- [ ] Die Ordnerstruktur entspricht `00generell.md`.
-- [ ] Projektstruktur und Startbefehle sind in der `README.md` dokumentiert.
+- [x] Alle Projekte zielen auf .NET 10 und bauen erfolgreich.
+- [x] Die Testanwendung startet mit einem leeren, funktionsfähigen WPF-Fenster.
+- [x] Tests liegen in einem separaten Testprojekt; ein Beispieltest läuft.
+- [x] Die Ordnerstruktur entspricht `00generell.md`.
+- [x] Projektstruktur und Startbefehle sind in der `README.md` dokumentiert.
