@@ -16,7 +16,8 @@ Phasen 03, 10 und 11.
 
 ## Akzeptanzkriterien
 
-- [ ] Während einer Wiedergabe wird der übergebene Text angezeigt.
-- [ ] Animationsereignisse werden anhand der Audiozeit ausgelöst, nicht anhand einer unabhängigen Schätzung der UI-Zeit.
-- [ ] Ende und Abbruch setzen Text- und Animationszustand zurück.
-- [ ] Zeitsteuerung und Zustandswechsel sind automatisiert getestet.
+- [x] SAPI-Textmarker wählen den aktuellen Textabschnitt anhand von Audiozeit und Zeichenposition aus.
+- [x] Playback-Zeitfortschritt und Phonem-/Visemcues verwenden dieselbe Zeitquelle; überfällige Cues werden vollständig weitergegeben.
+- [x] Abschluss, Abbruch und Fehler senden einen leeren Frame und setzen Text- sowie Animationszustand zurück.
+- [x] Cursor, monotone Zeitfolge, Fortschrittsweitergabe und Zustandsreset sind automatisiert getestet.
+- [x] Pause und Fortsetzen sind als von `SoundPlayer` nicht unterstützte Wiedergabeaktionen dokumentiert.

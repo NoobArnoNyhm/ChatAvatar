@@ -98,7 +98,10 @@ public sealed class AudioPlaybackSessionTests
 
         public Stream? ReceivedStream { get; private set; }
 
-        public Task PlayAsync(Stream audioStream, CancellationToken cancellationToken = default)
+        public Task PlayAsync(
+            Stream audioStream,
+            IProgress<TimeSpan>? positionProgress = null,
+            CancellationToken cancellationToken = default)
         {
             ReceivedStream = audioStream;
             if (CancellationRequested)

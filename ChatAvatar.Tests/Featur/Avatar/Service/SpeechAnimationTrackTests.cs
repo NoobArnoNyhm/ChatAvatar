@@ -27,6 +27,41 @@ public sealed class SpeechAnimationTrackTests
     }
 
     [TestMethod]
+    public void CursorSelectsTextAndNewAnimationCuesAtAudioPosition()
+    {
+        var phoneme = new SpeechAnimationCue(
+            TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(80), SpeechAnimationCueType.Phoneme, phoneme: "h");
+        var viseme = new SpeechAnimationCue(
+            TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(80), SpeechAnimationCueType.Viseme, viseme: 3);
+        var track = new SpeechAnimationTrack(
+            [phoneme, viseme],
+            [new SpeechTextCue(TimeSpan.FromMilliseconds(100), 0, 5)]);
+        var cursor = new SpeechTimelineCursor(track);
+
+        var beforeSpeech = cursor.Advance("Hello world", TimeSpan.FromMilliseconds(50));
+        var duringSpeech = cursor.Advance("Hello world", TimeSpan.FromMilliseconds(120));
+        var nextFrame = cursor.Advance("Hello world", TimeSpan.FromMilliseconds(150));
+
+        Assert.AreEqual(string.Empty, beforeSpeech.ActiveText);
+        Assert.AreEqual("Hello", duringSpeech.ActiveText);
+        Assert.AreEqual(0, duringSpeech.CharacterPosition);
+        Assert.HasCount(2, duringSpeech.DueAnimationCues);
+        Assert.AreEqual(viseme, duringSpeech.ActiveViseme);
+        Assert.HasCount(0, nextFrame.DueAnimationCues);
+        Assert.AreEqual("Hello world", duringSpeech.Transcript);
+    }
+
+    [TestMethod]
+    public void CursorRejectsAudioTimeMovingBackwards()
+    {
+        var cursor = new SpeechTimelineCursor(SpeechAnimationTrack.Empty);
+        cursor.Advance("hello", TimeSpan.FromMilliseconds(200));
+
+        Assert.ThrowsExactly<InvalidOperationException>(
+            () => cursor.Advance("hello", TimeSpan.FromMilliseconds(100)));
+    }
+
+    [TestMethod]
     public void CueRejectsInvalidTimeAndMissingTypeValue()
     {
         Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new SpeechAnimationCue(
@@ -52,6 +87,7 @@ public sealed class SpeechAnimationTrackTests
 
         Assert.IsGreaterThan(0, stream.Length);
         Assert.IsGreaterThan(0, result.AnimationTrack.Cues.Count);
+        Assert.IsGreaterThan(0, result.AnimationTrack.TextCues.Count);
         Assert.IsTrue(result.AnimationTrack.Cues.Any(cue => cue.Type == SpeechAnimationCueType.Phoneme));
         Assert.IsTrue(result.AnimationTrack.Cues.Any(cue => cue.Type == SpeechAnimationCueType.Viseme));
         Assert.IsTrue(result.AnimationTrack.Cues.All(cue => cue.AudioPosition >= TimeSpan.Zero));

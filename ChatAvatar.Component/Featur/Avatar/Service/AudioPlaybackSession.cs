@@ -21,6 +21,7 @@ public sealed class AudioPlaybackSession : IDisposable
 
     public async Task<AudioPlaybackResult> PlayAsync(
         Stream audioStream,
+        IProgress<TimeSpan>? positionProgress = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(audioStream);
@@ -37,7 +38,7 @@ public sealed class AudioPlaybackSession : IDisposable
         try
         {
             linkedCancellation.Token.ThrowIfCancellationRequested();
-            await _engine.PlayAsync(audioStream, linkedCancellation.Token).ConfigureAwait(false);
+            await _engine.PlayAsync(audioStream, positionProgress, linkedCancellation.Token).ConfigureAwait(false);
             SetStatus(AudioPlaybackStatus.Completed);
             return new AudioPlaybackResult(AudioPlaybackStatus.Completed);
         }

@@ -26,6 +26,7 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
         var synthesizer = new SpeechSynthesizer();
         var output = new MemoryStream();
         var cues = new ConcurrentQueue<SpeechAnimationCue>();
+        var textCues = new ConcurrentQueue<SpeechTextCue>();
         var completion = new TaskCompletionSource<SpeakCompletedEventArgs>(TaskCreationOptions.RunContinuationsAsynchronously);
         EventHandler<SpeakCompletedEventArgs> completedHandler = (_, eventArgs) => completion.TrySetResult(eventArgs);
         EventHandler<PhonemeReachedEventArgs> phonemeHandler = (_, eventArgs) => cues.Enqueue(new SpeechAnimationCue(
@@ -40,9 +41,14 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
             SpeechAnimationCueType.Viseme,
             viseme: eventArgs.Viseme,
             nextViseme: eventArgs.NextViseme));
+        EventHandler<SpeakProgressEventArgs> progressHandler = (_, eventArgs) => textCues.Enqueue(new SpeechTextCue(
+            eventArgs.AudioPosition,
+            eventArgs.CharacterPosition,
+            eventArgs.CharacterCount));
         synthesizer.SpeakCompleted += completedHandler;
         synthesizer.PhonemeReached += phonemeHandler;
         synthesizer.VisemeReached += visemeHandler;
+        synthesizer.SpeakProgress += progressHandler;
 
         try
         {
@@ -68,7 +74,7 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
             }
 
             output.Position = 0;
-            return new SpeechSynthesisResult(output, new SpeechAnimationTrack(cues));
+            return new SpeechSynthesisResult(output, new SpeechAnimationTrack(cues, textCues));
         }
         catch
         {
@@ -80,6 +86,7 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
             synthesizer.SpeakCompleted -= completedHandler;
             synthesizer.PhonemeReached -= phonemeHandler;
             synthesizer.VisemeReached -= visemeHandler;
+            synthesizer.SpeakProgress -= progressHandler;
             synthesizer.Dispose();
         }
     }
