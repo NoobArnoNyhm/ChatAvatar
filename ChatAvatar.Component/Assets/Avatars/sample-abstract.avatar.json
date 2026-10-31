@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "avatar": {
+    "id": "49cb466a-1e75-4e16-a4cf-8af27a5c3cdb",
+    "displayName": "Pulse",
+    "appearance": {
+      "kind": "abstract",
+      "lightColor": "#39D6C1",
+      "pulseIntensity": 0.75
+    }
+  }
+}

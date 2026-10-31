@@ -16,7 +16,7 @@ Phasen 04 bis 16.
 
 ## Akzeptanzkriterien
 
-- [ ] Für jeden Avatar-Typ ist mindestens ein Beispiel vorhanden.
-- [ ] Alle Beispiele lassen sich laden und in der Laufzeit darstellen.
-- [ ] Es werden keine 2D-Sprites oder nicht dokumentierten Fremdassets verwendet.
-- [ ] Ein automatisierter Ladetest prüft alle Beispiele.
+- [x] Für Gesicht, Bildstil und abstrakte Form liegt je eine Avatar-Datei in den lokalen Laufzeitassets.
+- [x] Alle Beispiele werden über den Katalog geladen und über den Runtime-Service zur Darstellung aktiviert.
+- [x] Es werden ausschließlich selbst erstellte Konfigurationen, prozedurale 3D-Geometrie und dokumentierte lokale Bibliotheksassets verwendet; keine 2D-Sprites.
+- [x] Herkunft, Speicherort und Nutzungsrechte sind in der `README.md` dokumentiert und ein automatisierter Test prüft alle Dateien.

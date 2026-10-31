@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "avatar": {
+    "id": "2f5b4028-0d86-4b79-9b82-fb84f4fdc69a",
+    "displayName": "Mira",
+    "appearance": {
+      "kind": "face",
+      "mouthScale": 1.0
+    }
+  }
+}

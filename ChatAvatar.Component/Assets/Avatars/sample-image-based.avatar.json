@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "avatar": {
+    "id": "b8b07bb5-5a8b-4a80-8c56-b5e1527e46f6",
+    "displayName": "Signal Lens",
+    "appearance": {
+      "kind": "imageBased",
+      "textureAssetPath": "builtin:image-style-lens",
+      "tintColor": "#E2A56F"
+    }
+  }
+}
