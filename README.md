@@ -56,6 +56,8 @@ Der WPF-Testhost kopiert die mitgelieferten Beispielavatare beim ersten Start in
 4. „Einstellungen“ öffnet die hostverwaltete Stimme-, Avatar-, Lautstärke- und Tempoauswahl.
 5. „Avatar-Editor“ öffnet den Editor für das Benutzerverzeichnis. Änderungen werden nach Rückkehr in die Avatarliste übernommen.
 
+Die Ende-zu-Ende-Tests verbinden Avatarwahl, Hostsettings, Synthesevertrag, WAV-Pegel, Wiedergabezeitlinie und Antwortzustand mit isolierten Adaptern. Sie greifen weder auf Lautsprecher noch Onlinedienste zu.
+
 ## Integrationsvertrag
 
 Ein Chat-Host erstellt eine Anfrage aus Text und den von ihm verwalteten Avatar-Einstellungen. Der Dienst liefert sofort eine Session mit stabiler Antwort-ID; der Host kann auf deren Abschluss warten oder sie abbrechen. Die Komponente speichert diese Einstellungen nicht.

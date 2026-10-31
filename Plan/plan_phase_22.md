@@ -16,7 +16,7 @@ Phasen 03 bis 21.
 
 ## Akzeptanzkriterien
 
-- [ ] Ein Ende-zu-Ende-Test prüft Textübergabe bis zum Abschluss der Avatar-Sitzung.
-- [ ] Abbruch und mindestens ein Fehlerpfad sind getestet.
-- [ ] Tests für Features bleiben im separaten Testprojekt und folgen der Featurestruktur.
-- [ ] Die Testbefehle funktionieren reproduzierbar offline.
+- [x] Ende-zu-Ende-Tests verbinden Avatarwahl, Hostsettings, Textsynthese, Audiofortschritt, Timeline-Frames und Antwortabschluss.
+- [x] Abbruch mit Frame-Reset und Synthesefehler mit terminalem Failed-Ergebnis sind getestet.
+- [x] Die Tests liegen im separaten Testprojekt unter `Featur/Avatar/Integration`.
+- [x] Tests verwenden deterministische Adapter statt echter Lautsprecher oder Onlinezugriff und laufen mit `dotnet test ChatAvatar.sln`.
