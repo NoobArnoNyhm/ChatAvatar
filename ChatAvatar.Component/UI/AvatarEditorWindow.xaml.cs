@@ -14,6 +14,7 @@ public partial class AvatarEditorWindow : Window
     private readonly string _avatarDirectory;
     private AvatarDefinition? _currentAvatar;
     private bool _isLoadingAppearance;
+    private bool _isInitialized;
 
     public AvatarEditorWindow(AvatarEditorService editorService, string avatarDirectory)
     {
@@ -21,6 +22,7 @@ public partial class AvatarEditorWindow : Window
         ArgumentException.ThrowIfNullOrWhiteSpace(avatarDirectory);
 
         InitializeComponent();
+        _isInitialized = true;
         _editorService = editorService;
         _avatarDirectory = avatarDirectory;
         AvatarTypeInput.ItemsSource = Enum.GetValues<AvatarKind>();
@@ -157,6 +159,11 @@ public partial class AvatarEditorWindow : Window
 
     private async Task OnAppearanceChangedAsync()
     {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
         MouthScaleValue.Text = MouthScaleInput.Value.ToString("0.00", CultureInfo.InvariantCulture);
         PulseIntensityValue.Text = PulseIntensityInput.Value.ToString("0.00", CultureInfo.InvariantCulture);
         if (!IsLoaded || _isLoadingAppearance || _currentAvatar is null || !TryCreateDraft(out var draft))
