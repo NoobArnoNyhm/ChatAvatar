@@ -40,6 +40,23 @@ public partial class AvatarWebView : UserControl
         });
     }
 
+    public Task SetVisemeAsync(int visemeId)
+    {
+        if (visemeId is < 0 or > 21)
+        {
+            throw new ArgumentOutOfRangeException(nameof(visemeId), "Viseme IDs must be between 0 and 21.");
+        }
+
+        return SendMessageAsync(new AvatarWebMessage(
+            AvatarWebMessageType.SetViseme,
+            AvatarWebMessage.CurrentProtocolVersion,
+            visemeId));
+    }
+
+    public Task ResetSpeechAnimationAsync() => SendMessageAsync(new AvatarWebMessage(
+        AvatarWebMessageType.ResetSpeechAnimation,
+        AvatarWebMessage.CurrentProtocolVersion));
+
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         Loaded -= OnLoaded;

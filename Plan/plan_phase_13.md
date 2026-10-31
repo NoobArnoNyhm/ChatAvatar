@@ -16,8 +16,9 @@ Phasen 08 und 11.
 
 ## Akzeptanzkriterien
 
-- [ ] Ein Gesicht wird ohne 2D-Sprites als 3D-Modell dargestellt.
-- [ ] Mindestens mehrere unterschiedliche Viseme erzeugen unterscheidbare Mundformen.
-- [ ] Animationsende führt das Gesicht in einen neutralen Zustand zurück.
-- [ ] Zuordnung und Verhalten sind mit automatisierten Tests und einem manuellen Sichttest abgesichert.
-- [ ] Der Avatar ist als Beispiel in der `README.md` beschrieben.
+- [x] Kopf, Augen, Ohren, Nase und Mund werden als lokale Three.js-3D-Meshes ohne 2D-Sprites aufgebaut.
+- [x] SAPI-Visemgruppen steuern unterscheidbare Mundöffnungen über den typisierten WebView2-Kanal.
+- [x] `ResetSpeechAnimationAsync` setzt den Mund in den neutralen Zustand zurück.
+- [x] Protocol payload und lokales Face-Asset sind automatisiert getestet.
+- [ ] Manuelle Sichtprüfung der gerenderten 3D-Mundformen in der WPF-Testanwendung.
+- [x] Der Gesichtsavatar und seine Steuer-API sind in der `README.md` beschrieben.
