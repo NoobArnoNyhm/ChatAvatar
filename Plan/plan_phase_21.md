@@ -16,8 +16,8 @@ Phasen 03, 10, 12, 16, 19 und 20.
 
 ## Akzeptanzkriterien
 
-- [ ] Ein eingegebener Text kann abgespielt und synchron animiert dargestellt werden.
-- [ ] Alle drei Beispielavatare sind in der Anwendung auswählbar.
-- [ ] Abbruch und Synthesefehler sind in der UI erkennbar.
-- [ ] Die Testanwendung speichert ihre Einstellungen selbst und übergibt sie der Komponente.
-- [ ] Der manuelle Testablauf ist in der `README.md` beschrieben.
+- [x] Eingabetext wird synthetisiert, abgespielt und mit Text-, Visem- und Pegelframes synchronisiert.
+- [x] Alle drei Beispielavatare werden im Benutzerverzeichnis bereitgestellt und sind auswählbar.
+- [x] Abbruch und Synthese-/Wiedergabefehler werden im Statusbereich angezeigt.
+- [x] Der Testhost speichert seine Settings selbst unter `%LOCALAPPDATA%` und übergibt sie dem Synthese-/Avatarvertrag.
+- [x] Testhost-Ablauf und manuelle Prüfschritte sind in der `README.md` dokumentiert.

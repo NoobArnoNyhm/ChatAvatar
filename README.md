@@ -46,7 +46,15 @@ dotnet test ChatAvatar.sln
 dotnet run --project ChatAvatar.TestApp/ChatAvatar.TestApp.csproj
 ```
 
-Das aktuelle Grundgerüst öffnet ein leeres WPF-Fenster. Die Avatar-Funktionen werden in den nachfolgenden Phasen ergänzt.
+Der WPF-Testhost kopiert die mitgelieferten Beispielavatare beim ersten Start in sein Benutzerverzeichnis unter `%LOCALAPPDATA%/ChatAvatar/Avatars`. Host-Einstellungen speichert ausschließlich der Testhost unter `%LOCALAPPDATA%/ChatAvatar/settings.json`.
+
+## Testhost-Ablauf
+
+1. Einen der drei Beispielavatare in der rechten Auswahl aktivieren.
+2. Einen Text eingeben und „Sprechen“ wählen. WAV-Erzeugung, Wiedergabe, Textfortschritt, Viseme und Audiopegel werden zusammengeführt.
+3. „Abbrechen“ stoppt eine aktive Synthese oder Wiedergabe; Fehler erscheinen im Statusbereich.
+4. „Einstellungen“ öffnet die hostverwaltete Stimme-, Avatar-, Lautstärke- und Tempoauswahl.
+5. „Avatar-Editor“ öffnet den Editor für das Benutzerverzeichnis. Änderungen werden nach Rückkehr in die Avatarliste übernommen.
 
 ## Integrationsvertrag
 
@@ -91,7 +99,7 @@ Unter `ChatAvatar.Component/Assets/Avatars` liegen die drei ladbaren Beispiele `
 
 Die Testanwendung hostet `AvatarWebView`, ein WPF-Control aus der Komponentenbibliothek. Es lädt `Assets/WebView/index.html` aus der Buildausgabe, blockiert Navigationen außerhalb lokaler Dateien und zeigt Laufzeit- oder Ladefehler direkt in der Ansicht. Die lokale Seite setzt eine Content Security Policy ohne Netzwerkverbindungen; die WebView2-Runtime muss auf dem System installiert sein.
 
-WebView2 mappt den lokalen Buildausgabeordner auf den virtuellen Ursprung `https://chatavatar.local`; dieser Host wird von WebView2 lokal aus Dateien bedient und benötigt keinen Netzwerkdienst. Die Seite importiert Three.js aus `Assets/ThreeJs/three.module.js`, rendert ein animiertes 3D-Testobjekt und passt Kamera und Renderer per `ResizeObserver` an die verfügbare Fläche an. Der Nachrichtenkanal verwendet versionierte JSON-Nachrichten (`Ready` und `Initialize`); externe Navigationen bleiben blockiert.
+WebView2 mappt den lokalen Buildausgabeordner auf den virtuellen Ursprung `https://chatavatar.local`; dieser Host wird von WebView2 lokal aus Dateien bedient und benötigt keinen Netzwerkdienst. Die Seite importiert Three.js aus `Assets/ThreeJs/three.module.js`, rendert die auswählbaren 3D-Avatare und passt Kamera sowie Renderer per `ResizeObserver` an. Der Nachrichtenkanal verwendet versionierte JSON-Nachrichten; externe Navigationen bleiben blockiert.
 
 Der erste Gesichtsavatar wird lokal aus Three.js-Geometrien aufgebaut: Kopf, Ohren, Augen, Nase und Mund sind 3D-Meshes, keine 2D-Sprites. `AvatarWebView.SetVisemeAsync` sendet SAPI-Visem-IDs (0 bis 21) über den typisierten WebView-Kanal; unterschiedliche Gruppen öffnen den Mund unterschiedlich weit. `ResetSpeechAnimationAsync` setzt den Mund in den neutralen Zustand zurück.
 
@@ -101,7 +109,7 @@ Der abstrakte Avatar besteht aus einer 3D-Hülle, einem Ring, einer Lichtkugel u
 
 `AvatarRuntimeService.SelectAsync` lädt eine Avatar-Datei anhand ihrer ID aus dem vom Host übergebenen Verzeichnis und aktiviert den zugehörigen Darstellungsmodus über `IAvatarRenderer`. `AvatarWebView` implementiert diesen Renderer. Die aktuelle Auswahl wird erst übernommen, wenn Laden und Renderer-Aufruf erfolgreich waren; fehlende oder doppelte IDs sowie Rendererfehler lassen die bisherige Auswahl unangetastet.
 
-`AvatarEditorWindow` stellt die Grundaktionen zum Aktualisieren der Liste, Neuanlegen, Öffnen und Speichern bereit. Der Host übergibt Editor-Service und Avatar-Verzeichnis beim Erzeugen des Fensters. Der Editor kann Namen und Darstellungstyp ändern; typenbezogene Eigenschaften und Live-Vorschau werden in Phase 18 ergänzt.
+`AvatarEditorWindow` stellt die Grundaktionen zum Aktualisieren der Liste, Neuanlegen, Öffnen und Speichern bereit. Der Host übergibt Editor-Service und Avatar-Verzeichnis beim Erzeugen des Fensters. Der Editor kann Name, Darstellungstyp und typenbezogene Eigenschaften ändern; die lokale Live-Vorschau aktualisiert sich vor dem Speichern.
 
 Im Editor sind je nach Darstellung nur passende Eigenschaften sichtbar: Gesichtsmodellpfad und Mundskalierung, Bildtextur und Farbton oder Lichtfarbe und Pulsintensität. Änderungen werden validiert und an die lokale WebView2-Vorschau gesendet. Assetpfade müssen relativ und lokal sein; URLs, absolute Pfade und `..`-Segmente werden abgewiesen. Ungültige Eingaben zeigen einen Fehler und verhindern Speichern.
 

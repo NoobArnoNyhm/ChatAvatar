@@ -1,13 +1,51 @@
 ﻿<Window x:Class="ChatAvatar.TestApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ChatAvatar.TestApp"
         xmlns:avatar="clr-namespace:ChatAvatar.Component.UI;assembly=ChatAvatar.Component"
-        mc:Ignorable="d"
-        Title="ChatAvatar Test Host" Height="450" Width="800">
-    <Grid>
-        <avatar:AvatarWebView />
+        Title="ChatAvatar Test Host" Height="760" Width="1180"
+        MinHeight="600" MinWidth="860"
+        WindowStartupLocation="CenterScreen"
+        Closing="OnWindowClosing">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="280" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="14" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="14" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" LastChildFill="True">
+            <Button x:Name="CancelButton" DockPanel.Dock="Right" Margin="10,0,0,0"
+                    Content="Abbrechen" Padding="14,8" IsEnabled="False" Click="OnCancelClicked" />
+            <Button x:Name="SendButton" DockPanel.Dock="Right" Margin="10,0,0,0"
+                    Content="Sprechen" Padding="18,8" Click="OnSendClicked" />
+            <TextBox x:Name="InputText" Padding="10" VerticalContentAlignment="Center"
+                     MinHeight="40" ToolTip="Text für die Sprachsynthese" />
+        </DockPanel>
+
+        <avatar:AvatarWebView x:Name="AvatarView" Grid.Column="0" Grid.Row="2" />
+
+        <StackPanel Grid.Column="1" Grid.Row="2" Margin="18,0,0,0">
+            <TextBlock Margin="0,0,0,6" FontSize="16" FontWeight="SemiBold" Text="Avatar" />
+            <ComboBox x:Name="AvatarPicker" Padding="8" DisplayMemberPath="Avatar.DisplayName"
+                      SelectionChanged="OnAvatarSelectionChanged" />
+            <TextBlock x:Name="SelectedAvatarId" Margin="0,6,0,18" Foreground="#667780" TextWrapping="Wrap" />
+
+            <Button Content="Einstellungen" Padding="12,8" Margin="0,0,0,8" Click="OnSettingsClicked" />
+            <Button Content="Avatar-Editor" Padding="12,8" Click="OnEditorClicked" />
+
+            <TextBlock Margin="0,24,0,6" FontSize="16" FontWeight="SemiBold" Text="Status" />
+            <TextBlock x:Name="StatusText" Text="Initialisiere Testhost..." TextWrapping="Wrap" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+            <TextBlock x:Name="ActiveSpeechText" MinHeight="22" FontWeight="SemiBold" />
+            <TextBlock x:Name="TranscriptText" Foreground="#667780" TextWrapping="Wrap" />
+        </StackPanel>
     </Grid>
 </Window>

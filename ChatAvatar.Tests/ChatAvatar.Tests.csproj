@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChatAvatar.Component\ChatAvatar.Component.csproj" />
+    <ProjectReference Include="..\ChatAvatar.TestApp\ChatAvatar.TestApp.csproj" />
   </ItemGroup>
 
 </Project>
