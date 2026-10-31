@@ -24,7 +24,7 @@ Die fachliche Logik wird nach DDD-Grenzen in `Featur` organisiert. Services und 
 
 Die Laufzeit darf keine CDN- oder sonstigen Online-Ressourcen laden. Die WebView2-SDK- und System.Speech-Paketversionen sind in `ChatAvatar.Component.csproj` festgelegt. Three.js 0.187.0 liegt als lokale Datei unter `ChatAvatar.Component/Assets/ThreeJs/three.module.js`; die MIT-Lizenz liegt daneben. Die Datei wird in die Buildausgabe kopiert. Ein Test prüft die lokale Verfügbarkeit der SDK-Assemblies und des Three.js-Moduls.
 
-Für die spätere Offline-Verteilung muss zusätzlich eine passende Fixed-Version-WebView2-Runtime mit dem Anwendungspaket ausgeliefert werden; die auf einem Entwicklungsrechner installierte Evergreen-Runtime ist kein Ersatz dafür. Auch die von System.Speech verwendete Stimme muss lokal auf dem Zielsystem verfügbar sein. Paketierung und Offline-Installation werden in Phase 23 umgesetzt.
+Für die Offline-Verteilung wird eine passende Fixed-Version-WebView2-Runtime mit dem Anwendungspaket ausgeliefert; die auf einem Entwicklungsrechner installierte Evergreen-Runtime ist kein Ersatz dafür. Das Publish-Skript verlangt eine lokale Runtime-Quelle. Auch die von System.Speech verwendete Stimme muss lokal auf dem Zielsystem verfügbar sein.
 
 Nach einem initialen NuGet-Restore kann der Build-, Test- und WPF-Startcheck bei deaktiviertem Netzwerk ausgeführt werden. Der Check prüft, dass der GUI-Prozess die Message-Loop erreicht:
 
@@ -72,7 +72,7 @@ Danach ein Paket mit einer lokal verfügbaren WebView2 Fixed Version erstellen:
 ./scripts/Publish-Offline.ps1 -WebView2FixedRuntimePath "C:/path/to/Microsoft.WebView2.FixedVersionRuntime.156.0.4314.50.x64"
 ```
 
-Das Paket wird unter `artifacts/offline-win-x64` erstellt. Es enthält die Self-Contained-.NET-10-WPF-Anwendung, WebView2 Fixed Version unter `WebView2FixedRuntime`, Three.js, HTML/JavaScript und Beispielavatare. Das `offline-deployment.json`-Manifest nennt Runtime-Version und Offline-Anforderung. Der WebView2-Host bevorzugt diesen Runtimeordner und verwendet auf Entwicklungsrechnern ohne ihn die installierte Evergreen-Runtime. Für die Verteilung darf die Runtime-Quelle nur aus dem offiziellen WebView2 Fixed Version Runtime-Paket stammen.
+Das Paket wird unter `artifacts/offline-win-x64` erstellt. Es enthält die Self-Contained-.NET-10-WPF-Anwendung, WebView2 Fixed Version unter `WebView2FixedRuntime`, Three.js, HTML/JavaScript und Beispielavatare. Das `offline-deployment.json`-Manifest nennt Runtime-Version und Offline-Anforderung. Der WebView2-Host bevorzugt diesen Runtimeordner und verwendet auf Entwicklungsrechnern ohne ihn die installierte Evergreen-Runtime. Für eine Verteilung muss die Runtime-Quelle aus dem offiziellen WebView2 Fixed Version Runtime-Paket stammen; das Skript prüft die Dateistruktur, nicht die Herkunft oder Signatur.
 
 Das Paket prüfen und kurz starten:
 
@@ -86,13 +86,14 @@ Ein Chat-Host erstellt eine Anfrage aus Text und den von ihm verwalteten Avatar-
 
 ```csharp
 var request = new AvatarResponseRequest(
-	"Hello",
-	new AvatarResponseSettings(VoiceName: "Local Voice", AvatarId: "avatar-1"));
-using var session = responseService.Start(request);
-var result = await session.Completion;
+    "Hello",
+    new AvatarResponseSettings(voiceName: "Local Voice", avatarId: "avatar-id", volume: 80, rate: 1));
+var synthesis = await speechSynthesisService.SynthesizeAsync(request, cancellationToken);
+using var playback = new AudioPlaybackSession(audioPlaybackEngine);
+var result = await playbackCoordinator.PlayAsync(request.Text, synthesis, playback, cancellationToken);
 ```
 
-Die Session endet mit `Completed`, `Cancelled` oder `Failed`. Bei einem Fehler enthält das Ergebnis eine Meldung. Die Audio- und Avatar-Ausführung wird in den folgenden Phasen an diesen Vertrag angeschlossen.
+Die Komponente speichert `AvatarResponseSettings` nicht dauerhaft. Der Host verwaltet die Auswahl und Persistenz und reicht die Einstellungen bei jeder Anfrage mit.
 
 ## Avatar-Dateiformat
 
@@ -146,3 +147,17 @@ Im Editor sind je nach Darstellung nur passende Eigenschaften sichtbar: Gesichts
 `AudioPlaybackSession` spielt den WAV-Stream über `SystemSoundPlayerEngine` ab. Der Host erhält `Playing` und einen terminalen Zustand (`Completed`, `Cancelled` oder `Failed`) über die Statusereignisse und das Ergebnis. Die Session übernimmt den übergebenen Stream und gibt ihn auch nach Abbruch oder Fehler frei; jede Session kann genau einmal gestartet werden.
 
 `SpeechPlaybackCoordinator` kombiniert Transkript, SAPI-Textmarker und Phonem-/Visemcues. Die Playback-Engine meldet ihre verstrichene Wiedergabezeit; anhand dieser einen Zeitquelle liefert der Coordinator den aktuellen Textabschnitt, neu fällige Animationsereignisse und das aktive Visem. Frames werden auf dem beim Start aktuellen Synchronisierungskontext publiziert. Bei Abschluss, Abbruch oder Fehler wird ein leerer Frame gesendet. Pause und Fortsetzen sind mit `SoundPlayer` nicht verfügbar.
+
+## Verifikationsstand
+
+- `dotnet test ChatAvatar.sln` und `dotnet build ChatAvatar.sln` laufen erfolgreich.
+- `Test-OfflineStartup.ps1` wurde ohne Restore ausgeführt; das Netzwerk wurde bei diesem Lauf nicht aktiv getrennt.
+- Das Offline-Publish- und Paketprüfskript wurde mit der lokal installierten Evergreen-Runtime-Struktur als Smoke-Test ausgeführt. Vor Verteilung muss es mit dem offiziellen Fixed-Version-Paket wiederholt werden.
+- Der manuelle Sichttest der Mundformen in der WPF-Anwendung steht noch aus; die gerenderten Pixel und Animationen wurden nicht visuell abgenommen.
+
+## Einschränkungen
+
+- Sprachqualität und verfügbare Stimmen hängen von lokal installierten Windows-SAPI-Stimmen ab.
+- `SoundPlayer` unterstützt in diesem Host keine Pause-/Fortsetzen-Aktion.
+- Die Fixed-Version-WebView2-Runtime wird beim Publish als lokale Eingabequelle erwartet und nicht im Quellrepository gespeichert.
+- Die Visem-zu-Mundform-Zuordnung ist ein erster funktionaler Platzhalter und benötigt noch manuelle Qualitätsprüfung.

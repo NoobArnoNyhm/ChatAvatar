@@ -16,8 +16,9 @@ Phasen 01 bis 23.
 
 ## Akzeptanzkriterien
 
-- [ ] Jedes implementierte Feature ist in der `README.md` beschrieben.
-- [ ] Build und automatisierte Tests laufen erfolgreich.
-- [ ] Alle drei Beispielavatare lassen sich in der Testanwendung verwenden.
-- [ ] Text, Audio und Avatar-Animation funktionieren ohne Onlinedienste.
-- [ ] Abweichungen und bekannte Einschränkungen sind dokumentiert.
+- [x] Jedes implementierte Feature, Hostabläufe und Offline-Paketierung sind in der `README.md` beschrieben.
+- [x] Solution-Build und automatisierte Tests laufen erfolgreich.
+- [x] Alle drei Beispielavatare werden im automatisierten Runtime-Test geladen und aktiviert.
+- [x] Text-/Audio-/Animationsworkflow nutzt lokale Synthese, lokale Assets und keine Laufzeit-Onlinedienste; Offline-Paketstart wurde mit lokaler Runtime-Struktur geprüft.
+- [x] Restore-/Netzwerkbedingungen, Runtime-Herkunft und funktionale Einschränkungen sind dokumentiert.
+- [ ] Manueller Sichttest der gerenderten Mundformen; siehe offene Abnahme in `plan_phase_13.md`.
