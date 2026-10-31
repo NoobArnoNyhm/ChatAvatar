@@ -22,11 +22,11 @@ Die fachliche Logik wird nach DDD-Grenzen in `Featur` organisiert. Services und 
 
 ## Offline-Abhängigkeiten
 
-Die Laufzeit darf keine CDN- oder sonstigen Online-Ressourcen laden. Die WebView2-SDK- und System.Speech-Paketversionen sind in `ChatAvatar.Component.csproj` festgelegt. Three.js 0.187.0 liegt als lokale Datei unter `ChatAvatar.Component/Assets/ThreeJs/three.module.js`; die MIT-Lizenz liegt daneben. Die Datei wird in die Buildausgabe kopiert. Ein Test prüft die lokale Verfügbarkeit der SDK-Assemblies und des Three.js-Moduls.
+Die Laufzeit darf keine CDN- oder sonstigen Online-Ressourcen laden. Die WebView2-SDK- und System.Speech-Paketversionen sind in `ChatAvatar.Component.csproj` festgelegt. Three.js 0.187.0 liegt mit `three.module.js` und der benötigten `three.core.js` unter `ChatAvatar.Component/Assets/ThreeJs`; die MIT-Lizenz liegt daneben. Beide Dateien werden in die Buildausgabe und das Offline-Paket kopiert. Tests prüfen die lokale Verfügbarkeit der Module.
 
 Für die Offline-Verteilung wird eine passende Fixed-Version-WebView2-Runtime mit dem Anwendungspaket ausgeliefert; die auf einem Entwicklungsrechner installierte Evergreen-Runtime ist kein Ersatz dafür. Das Publish-Skript verlangt eine lokale Runtime-Quelle. Auch die von System.Speech verwendete Stimme muss lokal auf dem Zielsystem verfügbar sein.
 
-Nach einem initialen NuGet-Restore kann der Build-, Test- und WPF-Startcheck bei deaktiviertem Netzwerk ausgeführt werden. Der Check prüft, dass der GUI-Prozess die Message-Loop erreicht:
+Nach einem initialen NuGet-Restore kann der Build-, Test- und WPF-Rendercheck bei deaktiviertem Netzwerk ausgeführt werden. Der Check wartet auf `SceneReady` nach dem ersten WebGL-Frame und gibt JavaScript-/WebGL-Fehler aus:
 
 ```powershell
 ./scripts/Test-OfflineStartup.ps1
@@ -124,7 +124,7 @@ Unter `ChatAvatar.Component/Assets/Avatars` liegen die drei ladbaren Beispiele `
 
 Die Testanwendung hostet `AvatarWebView`, ein WPF-Control aus der Komponentenbibliothek. Es lädt `Assets/WebView/index.html` aus der Buildausgabe, blockiert Navigationen außerhalb lokaler Dateien und zeigt Laufzeit- oder Ladefehler direkt in der Ansicht. Die lokale Seite setzt eine Content Security Policy ohne Netzwerkverbindungen; die WebView2-Runtime muss auf dem System installiert sein.
 
-WebView2 mappt den lokalen Buildausgabeordner auf den virtuellen Ursprung `https://chatavatar.local`; dieser Host wird von WebView2 lokal aus Dateien bedient und benötigt keinen Netzwerkdienst. Die Seite importiert Three.js aus `Assets/ThreeJs/three.module.js`, rendert die auswählbaren 3D-Avatare und passt Kamera sowie Renderer per `ResizeObserver` an. Der Nachrichtenkanal verwendet versionierte JSON-Nachrichten; externe Navigationen bleiben blockiert.
+WebView2 mappt den lokalen Buildausgabeordner auf den virtuellen Ursprung `https://chatavatar.local`; dieser Host wird von WebView2 lokal aus Dateien bedient und benötigt keinen Netzwerkdienst. Die Seite importiert Three.js aus `Assets/ThreeJs/three.module.js` samt lokalem `three.core.js`, rendert die auswählbaren 3D-Avatare und passt Kamera sowie Renderer per `ResizeObserver` an. Nach dem ersten WebGL-Frame sendet sie `SceneReady` mit Canvasgröße. JavaScript- und Rendererfehler werden an WPF weitergereicht und sichtbar angezeigt; externe Navigationen bleiben blockiert.
 
 Der erste Gesichtsavatar wird lokal aus Three.js-Geometrien aufgebaut: Kopf, Ohren, Augen, Nase und Mund sind 3D-Meshes, keine 2D-Sprites. `AvatarWebView.SetVisemeAsync` sendet SAPI-Visem-IDs (0 bis 21) über den typisierten WebView-Kanal; unterschiedliche Gruppen öffnen den Mund unterschiedlich weit. `ResetSpeechAnimationAsync` setzt den Mund in den neutralen Zustand zurück.
 
@@ -151,7 +151,7 @@ Im Editor sind je nach Darstellung nur passende Eigenschaften sichtbar: Gesichts
 ## Verifikationsstand
 
 - `dotnet test ChatAvatar.sln` und `dotnet build ChatAvatar.sln` laufen erfolgreich.
-- `Test-OfflineStartup.ps1` wurde ohne Restore ausgeführt; das Netzwerk wurde bei diesem Lauf nicht aktiv getrennt.
+- `Test-OfflineStartup.ps1` baut und testet ohne Restore und wartet auf `SceneReady` nach dem ersten erfolgreichen WebGL-Frame; das Netzwerk wurde bei diesem Lauf nicht aktiv getrennt.
 - Das Offline-Publish- und Paketprüfskript wurde mit der lokal installierten Evergreen-Runtime-Struktur als Smoke-Test ausgeführt. Vor Verteilung muss es mit dem offiziellen Fixed-Version-Paket wiederholt werden.
 - Der manuelle Sichttest der Mundformen in der WPF-Anwendung steht noch aus; die gerenderten Pixel und Animationen wurden nicht visuell abgenommen.
 

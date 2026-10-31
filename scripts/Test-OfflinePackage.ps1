@@ -34,6 +34,7 @@ $requiredFiles = @(
     'Assets\WebView\index.html',
     'Assets\WebView\avatar-scene.js',
     'Assets\ThreeJs\three.module.js',
+    'Assets\ThreeJs\three.core.js',
     'Assets\Avatars\sample-face.avatar.json',
     'Assets\Avatars\sample-image-based.avatar.json',
     'Assets\Avatars\sample-abstract.avatar.json'
@@ -52,21 +53,5 @@ if (-not (Test-Path (Join-Path $runtimePath 'locales') -PathType Container)) {
     throw 'The offline package is missing the WebView2 locales directory.'
 }
 
-$process = Start-Process -FilePath $applicationPath -WorkingDirectory $resolvedPackagePath -PassThru
-try {
-    $ready = $process.WaitForInputIdle(15000)
-    $process.Refresh()
-    if ($process.HasExited -or -not $ready) {
-        throw 'The packaged WPF application did not reach its message loop.'
-    }
-
-    Write-Output "Offline package smoke test passed; WebView2 $($manifest.webView2Runtime)."
-}
-finally {
-    if (-not $process.HasExited) {
-        $null = $process.CloseMainWindow()
-        if (-not $process.WaitForExit(3000)) {
-            Stop-Process -Id $process.Id -Force
-        }
-    }
-}
+& (Join-Path $PSScriptRoot 'Test-AvatarRendering.ps1') -ApplicationPath $applicationPath
+Write-Output "Offline package smoke test passed; WebView2 $($manifest.webView2Runtime)."

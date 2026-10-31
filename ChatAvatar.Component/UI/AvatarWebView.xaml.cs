@@ -15,6 +15,7 @@ public partial class AvatarWebView : UserControl, IAvatarRenderer
     private const string VirtualHostName = "chatavatar.local";
     private readonly List<AvatarWebMessage> _pendingMessages = [];
     private bool _isPageReady;
+    private string? _lastConsoleError;
     private static readonly JsonSerializerOptions MessageSerializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -120,6 +121,20 @@ public partial class AvatarWebView : UserControl, IAvatarRenderer
                 browserExecutableFolder: runtimeDirectory,
                 userDataFolder: userDataDirectory);
             await Browser.EnsureCoreWebView2Async(environment);
+            var logReceiver = Browser.CoreWebView2.GetDevToolsProtocolEventReceiver("Log.entryAdded");
+            logReceiver.DevToolsProtocolEventReceived += (_, args) =>
+            {
+                using var document = JsonDocument.Parse(args.ParameterObjectAsJson);
+                var entry = document.RootElement.GetProperty("entry");
+                if (entry.TryGetProperty("level", out var level)
+                    && string.Equals(level.GetString(), "error", StringComparison.Ordinal))
+                {
+                    var source = entry.TryGetProperty("url", out var url) ? url.GetString() : null;
+                    var text = entry.TryGetProperty("text", out var entryText) ? entryText.GetString() : null;
+                    _lastConsoleError = string.IsNullOrWhiteSpace(source) ? text : $"{text} ({source})";
+                }
+            };
+            await Browser.CoreWebView2.CallDevToolsProtocolMethodAsync("Log.enable", "{}");
             Browser.CoreWebView2.SetVirtualHostNameToFolderMapping(
                 VirtualHostName,
                 AppContext.BaseDirectory,
@@ -184,6 +199,19 @@ public partial class AvatarWebView : UserControl, IAvatarRenderer
                 }
 
                 _pendingMessages.Clear();
+            }
+            else if (message.Type == AvatarWebMessageType.SceneReady)
+            {
+                ErrorPanel.Visibility = Visibility.Collapsed;
+            }
+            else if (message.Type == AvatarWebMessageType.RendererError)
+            {
+                if (!string.IsNullOrWhiteSpace(_lastConsoleError))
+                {
+                    message = message with { ErrorMessage = $"{message.ErrorMessage} Console: {_lastConsoleError}" };
+                }
+
+                ShowError($"The 3D avatar could not be rendered. {message.ErrorMessage}");
             }
 
             MessageReceived?.Invoke(this, new AvatarWebMessageEventArgs(message));

@@ -12,7 +12,10 @@ public sealed record AvatarWebMessage(
     string? TextureAssetPath = null,
     string? TintColor = null,
     string? LightColor = null,
-    float? PulseIntensity = null)
+    float? PulseIntensity = null,
+    string? ErrorMessage = null,
+    int? CanvasWidth = null,
+    int? CanvasHeight = null)
 {
     public const int CurrentProtocolVersion = 1;
 

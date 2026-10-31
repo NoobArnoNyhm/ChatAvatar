@@ -28,10 +28,14 @@ public partial class MainWindow : Window
     private AudioPlaybackSession? _activePlayback;
     private CancellationTokenSource? _activeCancellation;
     private bool _initializing;
+    private readonly bool _renderSmokeTest;
+    private readonly string? _renderSmokeReportPath;
 
     public MainWindow()
     {
         InitializeComponent();
+        _renderSmokeTest = Environment.GetCommandLineArgs().Contains("--render-smoke-test", StringComparer.Ordinal);
+        _renderSmokeReportPath = Environment.GetEnvironmentVariable("CHATAVATAR_RENDER_SMOKE_REPORT");
 
         var hostDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -42,6 +46,7 @@ public partial class MainWindow : Window
         _avatarRuntime = new AvatarRuntimeService(_avatarCatalog, AvatarView);
         _speechSynthesisService = new SpeechSynthesisService(_speechEngine);
         _playbackCoordinator.FrameChanged += OnPlaybackFrameChanged;
+        AvatarView.MessageReceived += OnAvatarViewMessageReceived;
         AvatarPicker.ItemsSource = _avatars;
         Loaded += OnLoaded;
     }
@@ -76,6 +81,11 @@ public partial class MainWindow : Window
         catch (Exception exception)
         {
             StatusText.Text = $"Testhost konnte nicht initialisiert werden: {exception.Message}";
+            if (_renderSmokeTest)
+            {
+                WriteRenderSmokeReport(false, exception.ToString());
+                Application.Current.Shutdown(1);
+            }
         }
         finally
         {
@@ -312,6 +322,42 @@ public partial class MainWindow : Window
         }
 
         await AvatarView.SetAudioLevelAsync(frame.AudioLevel);
+    }
+
+    private void OnAvatarViewMessageReceived(object? sender, AvatarWebMessageEventArgs e)
+    {
+        if (e.Message.Type == AvatarWebMessageType.SceneReady)
+        {
+            StatusText.Text = $"3D-Szene gerendert ({e.Message.CanvasWidth}x{e.Message.CanvasHeight}).";
+            if (_renderSmokeTest)
+            {
+                WriteRenderSmokeReport(true, StatusText.Text);
+                Application.Current.Shutdown(0);
+            }
+        }
+        else if (e.Message.Type == AvatarWebMessageType.RendererError)
+        {
+            StatusText.Text = $"Avatar-Rendererfehler: {e.Message.ErrorMessage}";
+            if (_renderSmokeTest)
+            {
+                WriteRenderSmokeReport(false, e.Message.ErrorMessage ?? StatusText.Text);
+                Application.Current.Shutdown(1);
+            }
+        }
+    }
+
+    private void WriteRenderSmokeReport(bool sceneReady, string details)
+    {
+        if (string.IsNullOrWhiteSpace(_renderSmokeReportPath))
+        {
+            return;
+        }
+
+        File.WriteAllText(_renderSmokeReportPath, System.Text.Json.JsonSerializer.Serialize(new
+        {
+            sceneReady,
+            details
+        }));
     }
 
     private void OnWindowClosing(object? sender, CancelEventArgs e)

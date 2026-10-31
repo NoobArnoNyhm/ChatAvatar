@@ -8,5 +8,7 @@ public enum AvatarWebMessageType
     ResetSpeechAnimation,
     SetAvatarType,
     SetAudioLevel,
-    SetAvatarAppearance
+    SetAvatarAppearance,
+    SceneReady,
+    RendererError
 }

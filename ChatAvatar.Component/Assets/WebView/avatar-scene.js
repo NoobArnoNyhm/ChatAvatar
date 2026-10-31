@@ -22,6 +22,7 @@ scene.add(keyLight);
 const avatar = createFaceAvatar(THREE, scene);
 const imageBasedAvatar = createImageBasedAvatar(THREE, scene);
 const abstractAvatar = createAbstractAvatar(THREE, scene);
+let sceneReadySent = false;
 
 function resizeScene() {
   const width = canvas.clientWidth;
@@ -43,6 +44,20 @@ renderer.setAnimationLoop((time) => {
   imageBasedAvatar.update(seconds);
   abstractAvatar.update();
   renderer.render(scene, camera);
+  if (!sceneReadySent && canvas.width > 0 && canvas.height > 0) {
+    if (renderer.getContext().isContextLost()) {
+      throw new Error("WebGL context was lost before the first avatar frame.");
+    }
+
+    sceneReadySent = true;
+    window.__chatAvatarSceneReady = true;
+    window.chrome?.webview?.postMessage({
+      type: "sceneReady",
+      protocolVersion: 1,
+      canvasWidth: canvas.width,
+      canvasHeight: canvas.height,
+    });
+  }
 });
 
 if (window.chrome?.webview) {
