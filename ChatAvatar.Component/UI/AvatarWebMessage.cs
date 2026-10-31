@@ -6,7 +6,8 @@ public sealed record AvatarWebMessage(
     AvatarWebMessageType Type,
     int ProtocolVersion,
     int? VisemeId = null,
-    AvatarKind? AvatarType = null)
+    AvatarKind? AvatarType = null,
+    float? AudioLevel = null)
 {
     public const int CurrentProtocolVersion = 1;
 }

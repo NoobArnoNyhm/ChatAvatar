@@ -1,7 +1,16 @@
+using System.IO;
+
 namespace ChatAvatar.Component.Featur.Avatar.Service;
 
 public sealed class SpeechPlaybackCoordinator
 {
+    private readonly Func<Stream, IAudioLevelAnalyzer> _audioLevelAnalyzerFactory;
+
+    public SpeechPlaybackCoordinator(Func<Stream, IAudioLevelAnalyzer>? audioLevelAnalyzerFactory = null)
+    {
+        _audioLevelAnalyzerFactory = audioLevelAnalyzerFactory ?? (stream => new WaveAudioLevelAnalyzer(stream));
+    }
+
     public event EventHandler<SpeechPlaybackFrameEventArgs>? FrameChanged;
 
     public async Task<AudioPlaybackResult> PlayAsync(
@@ -15,10 +24,11 @@ public sealed class SpeechPlaybackCoordinator
         ArgumentNullException.ThrowIfNull(playbackSession);
 
         var cursor = new SpeechTimelineCursor(synthesis.AnimationTrack);
+        var audioLevelAnalyzer = _audioLevelAnalyzerFactory(synthesis.AudioStream);
         var synchronizationContext = SynchronizationContext.Current;
         var progress = new CallbackProgress(position =>
         {
-            var frame = cursor.Advance(transcript, position);
+            var frame = cursor.Advance(transcript, position, audioLevelAnalyzer.GetRmsLevel(position));
             PublishFrame(frame, synchronizationContext);
         });
 

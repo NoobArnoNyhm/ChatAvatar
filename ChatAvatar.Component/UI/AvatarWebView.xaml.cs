@@ -75,6 +75,19 @@ public partial class AvatarWebView : UserControl
             AvatarType: avatarType));
     }
 
+    public Task SetAudioLevelAsync(float audioLevel)
+    {
+        if (!float.IsFinite(audioLevel) || audioLevel is < 0 or > 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(audioLevel), "Audio level must be between 0 and 1.");
+        }
+
+        return SendMessageAsync(new AvatarWebMessage(
+            AvatarWebMessageType.SetAudioLevel,
+            AvatarWebMessage.CurrentProtocolVersion,
+            AudioLevel: audioLevel));
+    }
+
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         Loaded -= OnLoaded;

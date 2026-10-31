@@ -84,8 +84,10 @@ public sealed class SpeechAnimationTrackTests
 
         var result = await engine.SynthesizeAsync("Hello avatar", voices[0]);
         await using var stream = result.AudioStream;
+        var audioLevelAnalyzer = new WaveAudioLevelAnalyzer(stream);
 
         Assert.IsGreaterThan(0, stream.Length);
+        Assert.IsGreaterThan(0, audioLevelAnalyzer.Duration.TotalMilliseconds);
         Assert.IsGreaterThan(0, result.AnimationTrack.Cues.Count);
         Assert.IsGreaterThan(0, result.AnimationTrack.TextCues.Count);
         Assert.IsTrue(result.AnimationTrack.Cues.Any(cue => cue.Type == SpeechAnimationCueType.Phoneme));
@@ -94,5 +96,12 @@ public sealed class SpeechAnimationTrackTests
         Assert.IsTrue(result.AnimationTrack.Cues
             .Zip(result.AnimationTrack.Cues.Skip(1), (current, next) => current.AudioPosition <= next.AudioPosition)
             .All(isOrdered => isOrdered));
+        var maximumAudioLevel = 0f;
+        for (var position = TimeSpan.Zero; position < audioLevelAnalyzer.Duration; position += TimeSpan.FromMilliseconds(20))
+        {
+            maximumAudioLevel = Math.Max(maximumAudioLevel, audioLevelAnalyzer.GetRmsLevel(position));
+        }
+
+        Assert.IsGreaterThan(0f, maximumAudioLevel);
     }
 }

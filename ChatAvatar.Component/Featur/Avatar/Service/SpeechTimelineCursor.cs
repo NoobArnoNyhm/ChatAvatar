@@ -15,12 +15,17 @@ public sealed class SpeechTimelineCursor
         _track = track;
     }
 
-    public SpeechPlaybackFrame Advance(string transcript, TimeSpan audioPosition)
+    public SpeechPlaybackFrame Advance(string transcript, TimeSpan audioPosition, float audioLevel = 0)
     {
         ArgumentNullException.ThrowIfNull(transcript);
         if (audioPosition < TimeSpan.Zero)
         {
             throw new ArgumentOutOfRangeException(nameof(audioPosition));
+        }
+
+        if (!float.IsFinite(audioLevel) || audioLevel is < 0 or > 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(audioLevel));
         }
 
         if (_hasAdvanced && audioPosition < _lastPosition)
@@ -56,6 +61,7 @@ public sealed class SpeechTimelineCursor
             start,
             count,
             dueCues,
+            audioLevel,
             activeViseme);
     }
 }

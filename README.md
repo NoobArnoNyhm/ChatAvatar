@@ -93,6 +93,8 @@ Der erste Gesichtsavatar wird lokal aus Three.js-Geometrien aufgebaut: Kopf, Ohr
 
 Die Bildstil-Variante ist eine eigenständige 3D-Komposition aus extrudierter Metallplatte, Ringen, Linse und Lichtsegmenten. Eine prozedurale `CanvasTexture` wird lokal auf die 3D-Linse angewendet; es gibt keine externen oder aus *System Shock 2* übernommenen Assets. Die Darstellung reagiert auf Visemereignisse durch pulsierendes Linsenlicht. `SetAvatarTypeAsync(AvatarKind.ImageBased)` wechselt zwischen Gesichts- und Bildstil-Inszenierung.
 
+Der abstrakte Avatar besteht aus einer 3D-Hülle, einem Ring, einer Lichtkugel und einem `PointLight`. `WaveAudioLevelAnalyzer` berechnet den normalisierten RMS-Pegel aus WAV-PCM- oder IEEE-Float-Samples; der Playback-Frame liefert ihn zusammen mit Text und Visemen. Über `SetAudioLevelAsync` steuert dieser Pegel das Leuchten. Bei Stille oder nach dem Reset bleibt das Licht im neutralen Ruhezustand.
+
 ## Sprachsynthese
 
 `SpeechSynthesisService` nimmt eine `AvatarResponseRequest` entgegen und leitet Text sowie den vom Host angegebenen Stimmennamen an `SystemSpeechSynthesisEngine` weiter. Das Ergebnis enthält einen WAV-MemoryStream und einen zeitgeordneten Animations-Track aus `PhonemeReached`- und `VisemeReached`-Ereignissen. Die Zeitwerte beziehen sich auf die Audioausgabe; ein Track kann leer sein, wenn eine Stimme keine entsprechenden Ereignisse liefert. Der Aufrufer besitzt und entsorgt den zurückgegebenen Stream. Abbruch wird an `SpeechSynthesizer` weitergereicht und Fehler werden als Fehler des Synthesevorgangs zurückgegeben. System.Speech nutzt die auf dem Windows-System lokal installierten SAPI-Stimmen; es lädt selbst keine Sprachdienste online. Verfügbarkeit und Klang hängen von den lokal installierten Stimmen ab.

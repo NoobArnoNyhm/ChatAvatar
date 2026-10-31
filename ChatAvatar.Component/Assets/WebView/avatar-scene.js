@@ -1,6 +1,7 @@
 import * as THREE from "../ThreeJs/three.module.js";
 import { createFaceAvatar } from "./face-avatar.js";
 import { createImageBasedAvatar } from "./image-based-avatar.js";
+import { createAbstractAvatar } from "./abstract-avatar.js";
 
 const canvas = document.querySelector("#avatar-scene");
 const status = document.querySelector("#status");
@@ -20,6 +21,7 @@ scene.add(keyLight);
 
 const avatar = createFaceAvatar(THREE, scene);
 const imageBasedAvatar = createImageBasedAvatar(THREE, scene);
+const abstractAvatar = createAbstractAvatar(THREE, scene);
 
 function resizeScene() {
   const width = canvas.clientWidth;
@@ -39,6 +41,7 @@ renderer.setAnimationLoop((time) => {
   avatar.face.rotation.y = Math.sin(seconds * 0.28) * 0.08;
   avatar.face.rotation.x = Math.sin(seconds * 0.45) * 0.025;
   imageBasedAvatar.update(seconds);
+  abstractAvatar.update();
   renderer.render(scene, camera);
 });
 
@@ -54,10 +57,14 @@ if (window.chrome?.webview) {
     } else if (type === "resetspeechanimation") {
       avatar.reset();
       imageBasedAvatar.reset();
+      abstractAvatar.reset();
     } else if (type === "setavatartype" && typeof data.avatarType === "string") {
-      const isImageBased = data.avatarType.toLowerCase() === "imagebased";
-      avatar.face.visible = !isImageBased;
-      imageBasedAvatar.group.visible = isImageBased;
+      const avatarType = data.avatarType.toLowerCase();
+      avatar.face.visible = avatarType === "face";
+      imageBasedAvatar.group.visible = avatarType === "imagebased";
+      abstractAvatar.group.visible = avatarType === "abstract";
+    } else if (type === "setaudiolevel" && Number.isFinite(data.audioLevel)) {
+      abstractAvatar.setAudioLevel(data.audioLevel);
     }
   });
   window.chrome.webview.postMessage({ type: "ready", protocolVersion: 1 });

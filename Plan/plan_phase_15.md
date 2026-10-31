@@ -16,7 +16,7 @@ Phasen 08 und 10.
 
 ## Akzeptanzkriterien
 
-- [ ] Das Licht pulsiert sichtbar während der Wiedergabe.
-- [ ] Ohne aktive Wiedergabe bleibt die Darstellung im definierten Ruhezustand.
-- [ ] Pegelverarbeitung ist unabhängig von der konkreten Darstellung getestet.
-- [ ] Der Avatar wird als Beispiel in der `README.md` dokumentiert.
+- [x] Ein dreidimensionales Lichtobjekt reagiert auf den RMS-Pegel des tatsächlich abgespielten WAV-Fensters.
+- [x] Stille und Reset setzen den Audiopegel auf den neutralen Ruhezustand zurück.
+- [x] WAV-Pegelberechnung und Pegelweitergabe sind unabhängig von der Darstellung automatisiert getestet.
+- [x] Geometrie, Pegelquelle und WebView-Anbindung sind in der `README.md` dokumentiert.

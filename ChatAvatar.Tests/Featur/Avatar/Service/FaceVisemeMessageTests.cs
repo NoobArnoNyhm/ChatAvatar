@@ -46,4 +46,18 @@ public sealed class FaceVisemeMessageTests
         StringAssert.Contains(json, "\"type\":\"SetAvatarType\"");
         StringAssert.Contains(json, "\"avatarType\":\"ImageBased\"");
     }
+
+    [TestMethod]
+    public void AudioLevelMessageUsesVersionedNormalizedPayload()
+    {
+        var message = new AvatarWebMessage(
+            AvatarWebMessageType.SetAudioLevel,
+            AvatarWebMessage.CurrentProtocolVersion,
+            AudioLevel: 0.5f);
+
+        var json = JsonSerializer.Serialize(message, SerializerOptions);
+
+        StringAssert.Contains(json, "\"type\":\"SetAudioLevel\"");
+        StringAssert.Contains(json, "\"audioLevel\":0.5");
+    }
 }

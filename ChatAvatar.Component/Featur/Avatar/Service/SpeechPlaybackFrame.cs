@@ -7,6 +7,7 @@ public sealed record SpeechPlaybackFrame(
     int CharacterPosition,
     int CharacterCount,
     IReadOnlyList<SpeechAnimationCue> DueAnimationCues,
+    float AudioLevel,
     SpeechAnimationCue? ActiveViseme)
 {
     public static SpeechPlaybackFrame Empty { get; } = new(
@@ -16,5 +17,6 @@ public sealed record SpeechPlaybackFrame(
         0,
         0,
         Array.Empty<SpeechAnimationCue>(),
+        0,
         null);
 }
