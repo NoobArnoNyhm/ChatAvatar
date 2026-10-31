@@ -97,6 +97,8 @@ Der abstrakte Avatar besteht aus einer 3D-Hülle, einem Ring, einer Lichtkugel u
 
 `AvatarRuntimeService.SelectAsync` lädt eine Avatar-Datei anhand ihrer ID aus dem vom Host übergebenen Verzeichnis und aktiviert den zugehörigen Darstellungsmodus über `IAvatarRenderer`. `AvatarWebView` implementiert diesen Renderer. Die aktuelle Auswahl wird erst übernommen, wenn Laden und Renderer-Aufruf erfolgreich waren; fehlende oder doppelte IDs sowie Rendererfehler lassen die bisherige Auswahl unangetastet.
 
+`AvatarEditorWindow` stellt die Grundaktionen zum Aktualisieren der Liste, Neuanlegen, Öffnen und Speichern bereit. Der Host übergibt Editor-Service und Avatar-Verzeichnis beim Erzeugen des Fensters. Der Editor kann Namen und Darstellungstyp ändern; typenbezogene Eigenschaften und Live-Vorschau werden in Phase 18 ergänzt.
+
 ## Sprachsynthese
 
 `SpeechSynthesisService` nimmt eine `AvatarResponseRequest` entgegen und leitet Text sowie den vom Host angegebenen Stimmennamen an `SystemSpeechSynthesisEngine` weiter. Das Ergebnis enthält einen WAV-MemoryStream und einen zeitgeordneten Animations-Track aus `PhonemeReached`- und `VisemeReached`-Ereignissen. Die Zeitwerte beziehen sich auf die Audioausgabe; ein Track kann leer sein, wenn eine Stimme keine entsprechenden Ereignisse liefert. Der Aufrufer besitzt und entsorgt den zurückgegebenen Stream. Abbruch wird an `SpeechSynthesizer` weitergereicht und Fehler werden als Fehler des Synthesevorgangs zurückgegeben. System.Speech nutzt die auf dem Windows-System lokal installierten SAPI-Stimmen; es lädt selbst keine Sprachdienste online. Verfügbarkeit und Klang hängen von den lokal installierten Stimmen ab.

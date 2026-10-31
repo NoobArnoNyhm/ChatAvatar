@@ -16,8 +16,8 @@ Phasen 05, 06 und 16.
 
 ## Akzeptanzkriterien
 
-- [ ] Benutzer können einen bestehenden Avatar öffnen und einen neuen Avatar anlegen.
-- [ ] Der Typ kann bei der Neuanlage aus den drei unterstützten Varianten gewählt werden.
-- [ ] Speichern erzeugt beziehungsweise aktualisiert die zugehörige Avatar-Datei.
-- [ ] Editorablauf und Validierung sind automatisiert getestet.
-- [ ] Die Editorfunktionen sind in der `README.md` dokumentiert.
+- [x] Benutzer können eine Avatarliste aktualisieren, einen bestehenden Avatar öffnen und einen neuen Avatar anlegen.
+- [x] Bei der Neuanlage kann zwischen Gesicht, Bildstil und abstrakter Darstellung gewählt werden.
+- [x] Speichern legt eine Datei an oder aktualisiert die Avatar-Datei mit stabiler ID.
+- [x] Editor-Service, Standardwerte, Validierung und Speichern/Laden sind automatisiert getestet.
+- [x] Fensterverwendung und Umfang sind in der `README.md` dokumentiert.
