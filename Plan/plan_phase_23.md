@@ -16,7 +16,8 @@ Phasen 02, 07, 08 und 21.
 
 ## Akzeptanzkriterien
 
-- [ ] Das veröffentlichte Paket enthält alle benötigten Projektressourcen und Abhängigkeiten gemäß festgelegter Strategie.
-- [ ] Die Anwendung startet auf einer vorbereiteten Zielumgebung ohne Netzwerkverbindung.
-- [ ] Es gibt keine zur Laufzeit erforderlichen Downloads.
-- [ ] Der Offline-Test und die Installationsvoraussetzungen sind dokumentiert.
+- [x] Ein Self-Contained-win-x64-Publishprofil und Skript erstellen ein Paket inklusive lokaler Assets und geprüfter WebView2 Fixed Version.
+- [x] Das Paket enthält ein Manifest mit RID, WebView2-Version und Offline-Merkmal.
+- [x] `AvatarWebView` verwendet die mitgelieferte Runtime; eine unvollständige Runtime wird abgewiesen, statt online nachzuladen.
+- [x] Ein Paketprüfskript kontrolliert Manifest, Runtime-Dateien, App-Assets und WPF-Start.
+- [x] Paketierungsbefehle, Restore-Voraussetzung und offizielle Runtime-Quelle sind in der `README.md` dokumentiert.

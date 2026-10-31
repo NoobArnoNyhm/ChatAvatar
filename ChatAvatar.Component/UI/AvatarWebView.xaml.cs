@@ -110,7 +110,16 @@ public partial class AvatarWebView : UserControl, IAvatarRenderer
                 throw new FileNotFoundException("The local avatar page was not found.", pagePath);
             }
 
-            await Browser.EnsureCoreWebView2Async();
+            var runtimeDirectory = WebView2RuntimeLocator.FindBundledRuntime(AppContext.BaseDirectory);
+            var userDataDirectory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "ChatAvatar",
+                "WebView2");
+            Directory.CreateDirectory(userDataDirectory);
+            var environment = await CoreWebView2Environment.CreateAsync(
+                browserExecutableFolder: runtimeDirectory,
+                userDataFolder: userDataDirectory);
+            await Browser.EnsureCoreWebView2Async(environment);
             Browser.CoreWebView2.SetVirtualHostNameToFolderMapping(
                 VirtualHostName,
                 AppContext.BaseDirectory,

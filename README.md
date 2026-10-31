@@ -58,6 +58,28 @@ Der WPF-Testhost kopiert die mitgelieferten Beispielavatare beim ersten Start in
 
 Die Ende-zu-Ende-Tests verbinden Avatarwahl, Hostsettings, Synthesevertrag, WAV-Pegel, Wiedergabezeitlinie und Antwortzustand mit isolierten Adaptern. Sie greifen weder auf Lautsprecher noch Onlinedienste zu.
 
+## Offline-Bereitstellung
+
+Vor der Offline-Phase einmalig die win-x64-Pakete restaurieren:
+
+```powershell
+dotnet restore ChatAvatar.TestApp/ChatAvatar.TestApp.csproj --runtime win-x64
+```
+
+Danach ein Paket mit einer lokal verfügbaren WebView2 Fixed Version erstellen:
+
+```powershell
+./scripts/Publish-Offline.ps1 -WebView2FixedRuntimePath "C:/path/to/Microsoft.WebView2.FixedVersionRuntime.156.0.4314.50.x64"
+```
+
+Das Paket wird unter `artifacts/offline-win-x64` erstellt. Es enthält die Self-Contained-.NET-10-WPF-Anwendung, WebView2 Fixed Version unter `WebView2FixedRuntime`, Three.js, HTML/JavaScript und Beispielavatare. Das `offline-deployment.json`-Manifest nennt Runtime-Version und Offline-Anforderung. Der WebView2-Host bevorzugt diesen Runtimeordner und verwendet auf Entwicklungsrechnern ohne ihn die installierte Evergreen-Runtime. Für die Verteilung darf die Runtime-Quelle nur aus dem offiziellen WebView2 Fixed Version Runtime-Paket stammen.
+
+Das Paket prüfen und kurz starten:
+
+```powershell
+./scripts/Test-OfflinePackage.ps1
+```
+
 ## Integrationsvertrag
 
 Ein Chat-Host erstellt eine Anfrage aus Text und den von ihm verwalteten Avatar-Einstellungen. Der Dienst liefert sofort eine Session mit stabiler Antwort-ID; der Host kann auf deren Abschluss warten oder sie abbrechen. Die Komponente speichert diese Einstellungen nicht.
