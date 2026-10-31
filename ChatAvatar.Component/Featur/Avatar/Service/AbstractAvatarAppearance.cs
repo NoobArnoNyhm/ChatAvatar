@@ -1,18 +1,12 @@
-using System.Text.RegularExpressions;
 using System.Text.Json.Serialization;
 
 namespace ChatAvatar.Component.Featur.Avatar.Service;
 
 public sealed record AbstractAvatarAppearance : AvatarAppearance
 {
-    private static readonly Regex HexColorPattern = new("^#[0-9A-Fa-f]{6}$", RegexOptions.Compiled);
-
     public AbstractAvatarAppearance(string lightColor = "#FFFFFF", float pulseIntensity = 0.65f)
     {
-        if (!HexColorPattern.IsMatch(lightColor))
-        {
-            throw new ArgumentException("Light color must use the #RRGGBB format.", nameof(lightColor));
-        }
+        AvatarColor.Validate(lightColor, nameof(lightColor));
 
         if (pulseIntensity is < 0 or > 1)
         {

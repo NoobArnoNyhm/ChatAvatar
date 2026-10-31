@@ -82,6 +82,31 @@ export function createImageBasedAvatar(THREE, scene) {
   }
 
   let speechEnergy = 0;
+  let textureLoadId = 0;
+
+  function setAppearance({ textureAssetPath, tintColor }) {
+    if (typeof tintColor === "string") {
+      pupilMaterial.color.set(tintColor);
+      pupilMaterial.emissive.set(tintColor);
+    }
+
+    if (typeof textureAssetPath !== "string" || textureAssetPath.startsWith("builtin:")) return;
+
+    const requestId = ++textureLoadId;
+    const textureUrl = new URL(`../${textureAssetPath}`, import.meta.url);
+    new THREE.TextureLoader().load(textureUrl.href, (texture) => {
+      if (requestId !== textureLoadId) {
+        texture.dispose();
+        return;
+      }
+
+      texture.colorSpace = THREE.SRGBColorSpace;
+      lensMaterial.map?.dispose();
+      lensMaterial.map = texture;
+      lensMaterial.needsUpdate = true;
+    });
+  }
+
   function setViseme(visemeId) {
     speechEnergy = visemeId === 0 ? 0 : [1, 2, 3, 8, 9, 10, 11].includes(visemeId) ? 1 : 0.55;
   }
@@ -100,7 +125,7 @@ export function createImageBasedAvatar(THREE, scene) {
     speechEnergy = 0;
   }
 
-  return { group, setViseme, update, reset };
+  return { group, setAppearance, setViseme, update, reset };
 }
 
 function createLensTexture(THREE) {

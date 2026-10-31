@@ -60,4 +60,23 @@ public sealed class FaceVisemeMessageTests
         StringAssert.Contains(json, "\"type\":\"SetAudioLevel\"");
         StringAssert.Contains(json, "\"audioLevel\":0.5");
     }
+
+    [TestMethod]
+    public void AppearanceMessagesContainOnlyPropertiesForTheirAvatarType()
+    {
+        var face = AvatarWebMessage.ForAppearance(new AvatarDefinition(
+            Guid.NewGuid(), "Face", new FaceAvatarAppearance(mouthScale: 1.4f)));
+        var image = AvatarWebMessage.ForAppearance(new AvatarDefinition(
+            Guid.NewGuid(), "Image", new ImageBasedAvatarAppearance("Avatars/lens.png", "#AABBCC")));
+        var abstractAvatar = AvatarWebMessage.ForAppearance(new AvatarDefinition(
+            Guid.NewGuid(), "Abstract", new AbstractAvatarAppearance("#123456", 0.3f)));
+
+        Assert.AreEqual(AvatarKind.Face, face.AvatarType);
+        Assert.AreEqual(1.4f, face.MouthScale);
+        Assert.IsNull(face.TextureAssetPath);
+        Assert.AreEqual("#AABBCC", image.TintColor);
+        Assert.IsNull(image.MouthScale);
+        Assert.AreEqual("#123456", abstractAvatar.LightColor);
+        Assert.AreEqual(0.3f, abstractAvatar.PulseIntensity);
+    }
 }

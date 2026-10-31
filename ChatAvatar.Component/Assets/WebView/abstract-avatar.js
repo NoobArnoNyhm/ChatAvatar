@@ -37,16 +37,28 @@ export function createAbstractAvatar(THREE, scene) {
 
   let targetLevel = 0;
   let displayedLevel = 0;
+  let pulseIntensity = 1;
 
   function setAudioLevel(level) {
     targetLevel = Number.isFinite(level) ? Math.min(1, Math.max(0, level)) : 0;
   }
 
+  function setAppearance(appearance) {
+    if (typeof appearance.lightColor === "string") {
+      lightMaterial.color.set(appearance.lightColor);
+      lightMaterial.emissive.set(appearance.lightColor);
+      pointLight.color.set(appearance.lightColor);
+    }
+    if (Number.isFinite(appearance.pulseIntensity)) {
+      pulseIntensity = THREE.MathUtils.clamp(appearance.pulseIntensity, 0, 1);
+    }
+  }
+
   function update() {
     displayedLevel += (targetLevel - displayedLevel) * 0.28;
-    const glow = 0.08 + displayedLevel * 2.4;
+    const glow = 0.08 + displayedLevel * 2.4 * pulseIntensity;
     lightMaterial.emissiveIntensity = glow;
-    pointLight.intensity = 0.1 + displayedLevel * 4.2;
+    pointLight.intensity = 0.1 + displayedLevel * 4.2 * pulseIntensity;
     const scale = 1 + displayedLevel * 0.1;
     light.scale.setScalar(scale);
   }
@@ -56,5 +68,5 @@ export function createAbstractAvatar(THREE, scene) {
   }
 
   update();
-  return { group, setAudioLevel, update, reset };
+  return { group, setAppearance, setAudioLevel, update, reset };
 }

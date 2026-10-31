@@ -16,7 +16,7 @@ Phasen 13 bis 17.
 
 ## Akzeptanzkriterien
 
-- [ ] Änderungen an typbezogenen Eigenschaften aktualisieren die Vorschau.
-- [ ] Eigenschaften eines anderen Avatar-Typs sind nicht versehentlich editierbar.
-- [ ] Ungültige Werte werden sichtbar markiert und nicht gespeichert.
-- [ ] Vorschau und Validierung haben gezielte automatisierte Tests.
+- [x] Änderungen an typbezogenen Eigenschaften werden als versionierte Nachrichten an die lokale Live-Vorschau gesendet.
+- [x] Gesichts-, Bildstil- und Abstrakteigenschaften haben getrennte Editoren; jeweils nicht passende Felder sind ausgeblendet.
+- [x] Ungültige Namen, Farben, Skalierungen und externe/absolute Assetpfade werden sichtbar abgewiesen und nicht gespeichert.
+- [x] Modellvalidierung und typbezogene Preview-Payloads sind gezielt automatisiert getestet.

@@ -31,6 +31,20 @@ public sealed class AvatarDomainModelTests
     }
 
     [TestMethod]
+    public void AvatarAssetPathsMustRemainLocalAndRelative()
+    {
+        Assert.ThrowsExactly<ArgumentException>(() => new FaceAvatarAppearance("https://example.test/face.glb"));
+        Assert.ThrowsExactly<ArgumentException>(() => new ImageBasedAvatarAppearance("../outside.png"));
+        Assert.ThrowsExactly<ArgumentException>(() => new ImageBasedAvatarAppearance("C:\\outside.png"));
+    }
+
+    [TestMethod]
+    public void FaceAppearanceValidatesMouthScale()
+    {
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new FaceAvatarAppearance(mouthScale: 2.1f));
+    }
+
+    [TestMethod]
     public void AbstractAppearanceValidatesColorAndPulseRange()
     {
         Assert.ThrowsExactly<ArgumentException>(() => new AbstractAvatarAppearance("red"));

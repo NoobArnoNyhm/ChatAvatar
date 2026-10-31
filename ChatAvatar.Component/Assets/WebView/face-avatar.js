@@ -48,6 +48,14 @@ export function createFaceAvatar(THREE, scene) {
   mouth.position.set(0, -0.38, 0.52);
   face.add(mouth);
 
+  let mouthScale = 1;
+
+  function setAppearance(appearance) {
+    if (Number.isFinite(appearance.mouthScale)) {
+      mouthScale = THREE.MathUtils.clamp(appearance.mouthScale, 0.5, 2);
+    }
+  }
+
   function setViseme(visemeId) {
     const mouthOpening = visemeId === 0 ? 0.015
       : [1, 2, 3, 8, 9, 10, 11].includes(visemeId) ? 0.13
@@ -55,7 +63,7 @@ export function createFaceAvatar(THREE, scene) {
           : [19, 20, 21].includes(visemeId) ? 0.025
             : 0.05;
     const mouthWidth = [1, 2, 3, 8, 9, 10, 11].includes(visemeId) ? 0.2 : 0.16;
-    mouth.scale.set(mouthWidth, mouthOpening, 0.035);
+    mouth.scale.set(mouthWidth * mouthScale, mouthOpening * mouthScale, 0.035);
   }
 
   function reset() {
@@ -63,5 +71,5 @@ export function createFaceAvatar(THREE, scene) {
   }
 
   reset();
-  return { face, setViseme, reset };
+  return { face, setAppearance, setViseme, reset };
 }

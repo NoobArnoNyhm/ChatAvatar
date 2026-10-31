@@ -99,6 +99,8 @@ Der abstrakte Avatar besteht aus einer 3D-Hülle, einem Ring, einer Lichtkugel u
 
 `AvatarEditorWindow` stellt die Grundaktionen zum Aktualisieren der Liste, Neuanlegen, Öffnen und Speichern bereit. Der Host übergibt Editor-Service und Avatar-Verzeichnis beim Erzeugen des Fensters. Der Editor kann Namen und Darstellungstyp ändern; typenbezogene Eigenschaften und Live-Vorschau werden in Phase 18 ergänzt.
 
+Im Editor sind je nach Darstellung nur passende Eigenschaften sichtbar: Gesichtsmodellpfad und Mundskalierung, Bildtextur und Farbton oder Lichtfarbe und Pulsintensität. Änderungen werden validiert und an die lokale WebView2-Vorschau gesendet. Assetpfade müssen relativ und lokal sein; URLs, absolute Pfade und `..`-Segmente werden abgewiesen. Ungültige Eingaben zeigen einen Fehler und verhindern Speichern.
+
 ## Sprachsynthese
 
 `SpeechSynthesisService` nimmt eine `AvatarResponseRequest` entgegen und leitet Text sowie den vom Host angegebenen Stimmennamen an `SystemSpeechSynthesisEngine` weiter. Das Ergebnis enthält einen WAV-MemoryStream und einen zeitgeordneten Animations-Track aus `PhonemeReached`- und `VisemeReached`-Ereignissen. Die Zeitwerte beziehen sich auf die Audioausgabe; ein Track kann leer sein, wenn eine Stimme keine entsprechenden Ereignisse liefert. Der Aufrufer besitzt und entsorgt den zurückgegebenen Stream. Abbruch wird an `SpeechSynthesizer` weitergereicht und Fehler werden als Fehler des Synthesevorgangs zurückgegeben. System.Speech nutzt die auf dem Windows-System lokal installierten SAPI-Stimmen; es lädt selbst keine Sprachdienste online. Verfügbarkeit und Klang hängen von den lokal installierten Stimmen ab.

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,6 +13,8 @@ namespace ChatAvatar.Component.UI;
 public partial class AvatarWebView : UserControl, IAvatarRenderer
 {
     private const string VirtualHostName = "chatavatar.local";
+    private readonly List<AvatarWebMessage> _pendingMessages = [];
+    private bool _isPageReady;
     private static readonly JsonSerializerOptions MessageSerializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -36,12 +39,14 @@ public partial class AvatarWebView : UserControl, IAvatarRenderer
 
         await Dispatcher.InvokeAsync(() =>
         {
-            if (Browser.CoreWebView2 is null)
+            if (Browser.CoreWebView2 is null || !_isPageReady)
             {
-                throw new InvalidOperationException("The local WebView2 page has not been initialized.");
+                _pendingMessages.RemoveAll(pending => pending.Type == message.Type);
+                _pendingMessages.Add(message);
+                return;
             }
 
-            Browser.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(message, MessageSerializerOptions));
+            PostMessage(message);
         });
     }
 
@@ -86,6 +91,11 @@ public partial class AvatarWebView : UserControl, IAvatarRenderer
             AvatarWebMessageType.SetAudioLevel,
             AvatarWebMessage.CurrentProtocolVersion,
             AudioLevel: audioLevel));
+    }
+
+    public Task SetAvatarAppearanceAsync(AvatarDefinition avatar)
+    {
+        return SendMessageAsync(AvatarWebMessage.ForAppearance(avatar));
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
@@ -155,9 +165,16 @@ public partial class AvatarWebView : UserControl, IAvatarRenderer
 
             if (message.Type == AvatarWebMessageType.Ready)
             {
+                _isPageReady = true;
                 await SendMessageAsync(new AvatarWebMessage(
                     AvatarWebMessageType.Initialize,
                     AvatarWebMessage.CurrentProtocolVersion));
+                foreach (var pendingMessage in _pendingMessages)
+                {
+                    PostMessage(pendingMessage);
+                }
+
+                _pendingMessages.Clear();
             }
 
             MessageReceived?.Invoke(this, new AvatarWebMessageEventArgs(message));
@@ -167,4 +184,7 @@ public partial class AvatarWebView : UserControl, IAvatarRenderer
             ShowError($"The local avatar page sent an invalid message. {exception.Message}");
         }
     }
+
+    private void PostMessage(AvatarWebMessage message) =>
+        Browser.CoreWebView2!.PostWebMessageAsJson(JsonSerializer.Serialize(message, MessageSerializerOptions));
 }

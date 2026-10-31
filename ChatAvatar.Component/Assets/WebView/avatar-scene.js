@@ -65,6 +65,14 @@ if (window.chrome?.webview) {
       abstractAvatar.group.visible = avatarType === "abstract";
     } else if (type === "setaudiolevel" && Number.isFinite(data.audioLevel)) {
       abstractAvatar.setAudioLevel(data.audioLevel);
+    } else if (type === "setavatarappearance" && typeof data.avatarType === "string") {
+      const avatarType = data.avatarType.toLowerCase();
+      avatar.face.visible = avatarType === "face";
+      imageBasedAvatar.group.visible = avatarType === "imagebased";
+      abstractAvatar.group.visible = avatarType === "abstract";
+      if (avatarType === "face") avatar.setAppearance(data);
+      if (avatarType === "imagebased") imageBasedAvatar.setAppearance(data);
+      if (avatarType === "abstract") abstractAvatar.setAppearance(data);
     }
   });
   window.chrome.webview.postMessage({ type: "ready", protocolVersion: 1 });

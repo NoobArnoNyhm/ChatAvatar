@@ -7,5 +7,6 @@ public enum AvatarWebMessageType
     SetViseme,
     ResetSpeechAnimation,
     SetAvatarType,
-    SetAudioLevel
+    SetAudioLevel,
+    SetAvatarAppearance
 }
