@@ -11,15 +11,18 @@ public sealed class WebViewLocalAssetTests
         var pagePath = Path.Combine(AppContext.BaseDirectory, "Assets", "WebView", "index.html");
         var scenePath = Path.Combine(AppContext.BaseDirectory, "Assets", "WebView", "avatar-scene.js");
         var facePath = Path.Combine(AppContext.BaseDirectory, "Assets", "WebView", "face-avatar.js");
+        var imagePath = Path.Combine(AppContext.BaseDirectory, "Assets", "WebView", "image-based-avatar.js");
         var threePath = Path.Combine(AppContext.BaseDirectory, "Assets", "ThreeJs", "three.module.js");
 
         Assert.IsTrue(File.Exists(pagePath), $"Expected local WebView page at {pagePath}.");
         Assert.IsTrue(File.Exists(scenePath), $"Expected local Three.js scene at {scenePath}.");
         Assert.IsTrue(File.Exists(facePath), $"Expected local face avatar at {facePath}.");
+        Assert.IsTrue(File.Exists(imagePath), $"Expected local image-based avatar at {imagePath}.");
         Assert.IsTrue(File.Exists(threePath), $"Expected local Three.js module at {threePath}.");
         var page = await File.ReadAllTextAsync(pagePath);
         var scene = await File.ReadAllTextAsync(scenePath);
         var face = await File.ReadAllTextAsync(facePath);
+        var image = await File.ReadAllTextAsync(imagePath);
 
         StringAssert.Contains(page, "default-src 'none'");
         StringAssert.Contains(page, "connect-src 'none'");
@@ -29,11 +32,17 @@ public sealed class WebViewLocalAssetTests
         StringAssert.Contains(scene, "./face-avatar.js");
         StringAssert.Contains(face, "SphereGeometry");
         StringAssert.Contains(face, "setViseme");
+        StringAssert.Contains(image, "ExtrudeGeometry");
+        StringAssert.Contains(image, "TorusGeometry");
+        StringAssert.Contains(image, "CanvasTexture");
+        StringAssert.Contains(image, "speechEnergy");
         Assert.IsFalse(page.Contains("https://", StringComparison.OrdinalIgnoreCase));
         Assert.IsFalse(page.Contains("http://", StringComparison.OrdinalIgnoreCase));
         Assert.IsFalse(scene.Contains("https://", StringComparison.OrdinalIgnoreCase));
         Assert.IsFalse(scene.Contains("http://", StringComparison.OrdinalIgnoreCase));
         Assert.IsFalse(face.Contains("https://", StringComparison.OrdinalIgnoreCase));
         Assert.IsFalse(face.Contains("http://", StringComparison.OrdinalIgnoreCase));
+        Assert.IsFalse(image.Contains("https://", StringComparison.OrdinalIgnoreCase));
+        Assert.IsFalse(image.Contains("http://", StringComparison.OrdinalIgnoreCase));
     }
 }

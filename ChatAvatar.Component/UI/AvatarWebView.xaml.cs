@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Controls;
+using ChatAvatar.Component.Featur.Avatar.Service;
 using Microsoft.Web.WebView2.Core;
 
 namespace ChatAvatar.Component.UI;
@@ -14,7 +15,11 @@ public partial class AvatarWebView : UserControl
     private static readonly JsonSerializerOptions MessageSerializerOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        Converters = { new JsonStringEnumConverter<AvatarWebMessageType>() }
+        Converters =
+        {
+            new JsonStringEnumConverter<AvatarWebMessageType>(),
+            new JsonStringEnumConverter<AvatarKind>()
+        }
     };
 
     public AvatarWebView()
@@ -56,6 +61,19 @@ public partial class AvatarWebView : UserControl
     public Task ResetSpeechAnimationAsync() => SendMessageAsync(new AvatarWebMessage(
         AvatarWebMessageType.ResetSpeechAnimation,
         AvatarWebMessage.CurrentProtocolVersion));
+
+    public Task SetAvatarTypeAsync(AvatarKind avatarType)
+    {
+        if (!Enum.IsDefined(avatarType))
+        {
+            throw new ArgumentOutOfRangeException(nameof(avatarType));
+        }
+
+        return SendMessageAsync(new AvatarWebMessage(
+            AvatarWebMessageType.SetAvatarType,
+            AvatarWebMessage.CurrentProtocolVersion,
+            AvatarType: avatarType));
+    }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {

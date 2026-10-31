@@ -16,7 +16,7 @@ Phase 08.
 
 ## Akzeptanzkriterien
 
-- [ ] Die Darstellung ist eine 3D-Szene und verwendet keine 2D-Sprites.
-- [ ] Mindestens ein Element reagiert sichtbar auf Sprechereignisse.
-- [ ] Alle Assets liegen lokal vor.
-- [ ] Beispiel und Verhalten sind getestet und in der `README.md` dokumentiert.
+- [x] Die Darstellung ist eine geschichtete Three.js-3D-Szene aus extrudierten Flächen und Meshes, ohne 2D-Sprites.
+- [x] Linsenlicht und Segmente reagieren auf SAPI-Visemereignisse.
+- [x] Geometrie und Code sind lokale Assets; fremde Spiel-Assets werden nicht verwendet.
+- [x] Assetverfügbarkeit und typisierter Wechsel sind getestet und in der `README.md` dokumentiert.

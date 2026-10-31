@@ -5,5 +5,6 @@ public enum AvatarWebMessageType
     Ready,
     Initialize,
     SetViseme,
-    ResetSpeechAnimation
+    ResetSpeechAnimation,
+    SetAvatarType
 }

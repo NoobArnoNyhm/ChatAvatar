@@ -91,6 +91,8 @@ WebView2 mappt den lokalen Buildausgabeordner auf den virtuellen Ursprung `https
 
 Der erste Gesichtsavatar wird lokal aus Three.js-Geometrien aufgebaut: Kopf, Ohren, Augen, Nase und Mund sind 3D-Meshes, keine 2D-Sprites. `AvatarWebView.SetVisemeAsync` sendet SAPI-Visem-IDs (0 bis 21) über den typisierten WebView-Kanal; unterschiedliche Gruppen öffnen den Mund unterschiedlich weit. `ResetSpeechAnimationAsync` setzt den Mund in den neutralen Zustand zurück.
 
+Die Bildstil-Variante ist eine eigenständige 3D-Komposition aus extrudierter Metallplatte, Ringen, Linse und Lichtsegmenten. Eine prozedurale `CanvasTexture` wird lokal auf die 3D-Linse angewendet; es gibt keine externen oder aus *System Shock 2* übernommenen Assets. Die Darstellung reagiert auf Visemereignisse durch pulsierendes Linsenlicht. `SetAvatarTypeAsync(AvatarKind.ImageBased)` wechselt zwischen Gesichts- und Bildstil-Inszenierung.
+
 ## Sprachsynthese
 
 `SpeechSynthesisService` nimmt eine `AvatarResponseRequest` entgegen und leitet Text sowie den vom Host angegebenen Stimmennamen an `SystemSpeechSynthesisEngine` weiter. Das Ergebnis enthält einen WAV-MemoryStream und einen zeitgeordneten Animations-Track aus `PhonemeReached`- und `VisemeReached`-Ereignissen. Die Zeitwerte beziehen sich auf die Audioausgabe; ein Track kann leer sein, wenn eine Stimme keine entsprechenden Ereignisse liefert. Der Aufrufer besitzt und entsorgt den zurückgegebenen Stream. Abbruch wird an `SpeechSynthesizer` weitergereicht und Fehler werden als Fehler des Synthesevorgangs zurückgegeben. System.Speech nutzt die auf dem Windows-System lokal installierten SAPI-Stimmen; es lädt selbst keine Sprachdienste online. Verfügbarkeit und Klang hängen von den lokal installierten Stimmen ab.

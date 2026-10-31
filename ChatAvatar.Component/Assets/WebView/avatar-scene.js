@@ -1,5 +1,6 @@
 import * as THREE from "../ThreeJs/three.module.js";
 import { createFaceAvatar } from "./face-avatar.js";
+import { createImageBasedAvatar } from "./image-based-avatar.js";
 
 const canvas = document.querySelector("#avatar-scene");
 const status = document.querySelector("#status");
@@ -18,6 +19,7 @@ keyLight.position.set(2, 3, 4);
 scene.add(keyLight);
 
 const avatar = createFaceAvatar(THREE, scene);
+const imageBasedAvatar = createImageBasedAvatar(THREE, scene);
 
 function resizeScene() {
   const width = canvas.clientWidth;
@@ -36,6 +38,7 @@ renderer.setAnimationLoop((time) => {
   const seconds = time * 0.001;
   avatar.face.rotation.y = Math.sin(seconds * 0.28) * 0.08;
   avatar.face.rotation.x = Math.sin(seconds * 0.45) * 0.025;
+  imageBasedAvatar.update(seconds);
   renderer.render(scene, camera);
 });
 
@@ -47,8 +50,14 @@ if (window.chrome?.webview) {
       status.textContent = "3D face avatar ready";
     } else if (type === "setviseme" && Number.isInteger(data.visemeId)) {
       avatar.setViseme(data.visemeId);
+      imageBasedAvatar.setViseme(data.visemeId);
     } else if (type === "resetspeechanimation") {
       avatar.reset();
+      imageBasedAvatar.reset();
+    } else if (type === "setavatartype" && typeof data.avatarType === "string") {
+      const isImageBased = data.avatarType.toLowerCase() === "imagebased";
+      avatar.face.visible = !isImageBased;
+      imageBasedAvatar.group.visible = isImageBased;
     }
   });
   window.chrome.webview.postMessage({ type: "ready", protocolVersion: 1 });
