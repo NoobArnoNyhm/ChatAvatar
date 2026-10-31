@@ -1,4 +1,4 @@
-using ChatAvatar.Component.Feature.Avatar.Service;
+using ChatAvatar.Component.Feature.Avatar.Modell;
 
 namespace ChatAvatar.Component.UI;
 

@@ -1,6 +1,6 @@
 using System.IO;
-using ChatAvatar.Component.Feature.Avatar.Service;
 using ChatAvatar.TestApp;
+using ChatAvatar.Component.Feature.AvatarResponse.Modell;
 
 namespace ChatAvatar.Tests.Feature.Avatar.Service;
 

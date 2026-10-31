@@ -6,14 +6,17 @@ ChatAvatar ist eine wiederverwendbare .NET-10-WPF-Komponente zur Darstellung ein
 
 ```text
 ChatAvatar.Component/             Wiederverwendbare WPF-Komponentenbibliothek
-	Feature/<Feature>/Service/        Fachmodelle und Services je Feature
+	Feature/<Funktion>/Service/       Services und Schnittstellen je Funktion
+	Feature/<Funktion>/Modell/        Fachmodelle und Datenverträge je Funktion
 	UI/                              Von der Fachlogik getrennte Oberfläche
 ChatAvatar.TestApp/                Eigenständiger WPF-Host zum Ausprobieren
-ChatAvatar.Tests/Feature/<Feature>/ Featurebezogene automatisierte Tests
+ChatAvatar.Tests/Feature/<Funktion>/ Funktionsbezogene automatisierte Tests
 Plan/                              Projektziel und phasenweise Umsetzungspläne
 ```
 
-Die fachliche Logik wird nach DDD-Grenzen in `Feature` organisiert. Services und Modelle eines Features liegen gemeinsam im Unterordner `Service`. Oberflächen-Code gehört in `UI`. Die Testanwendung referenziert die wiederverwendbare Komponente; das separate Testprojekt referenziert sie für automatisierte Tests.
+Die fachliche Logik wird nach DDD-Grenzen in `Feature` organisiert. Die Funktionsbereiche `Avatar`, `AudioPlayback`, `SpeechSynthesis`, `SpeechAnimation` und `AvatarResponse` trennen Ablaufsteuerung und Schnittstellen unter `Service` von Fachmodellen und Datenverträgen unter `Modell`. Namespaces entsprechen der Ordnerstruktur: `ChatAvatar.Component.Feature.<Funktion>.<Service|Modell>`. Oberflächen-Code gehört in `UI`. Die Testanwendung referenziert die wiederverwendbare Komponente; das separate Testprojekt referenziert sie für automatisierte Tests.
+
+Durch diese Umstrukturierung ändern sich die Namespaces öffentlicher Typen. Externe Verbraucher müssen ihre Imports und qualifizierten Typnamen anpassen und neu bauen; Typnamen, öffentliche Member und JSON-Formate bleiben unverändert.
 
 ## Voraussetzungen
 

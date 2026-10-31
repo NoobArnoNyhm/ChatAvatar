@@ -8,7 +8,7 @@ Eine baubare .NET-10-Lösung mit klaren Projektgrenzen und den im Projekt festge
 
 - Lösung und minimale Projekte für wiederverwendbare Avatar-Komponente, WPF-Testanwendung und automatisierte Tests erstellen.
 - Fachbereiche unter `Feature`, die Oberfläche getrennt unter `UI` strukturieren.
-- Feature-Services und -Modelle unter dem jeweiligen Feature in `Service` ablegen.
+- Feature-Services und Schnittstellen unter der jeweiligen Funktion in `Service`, Fachmodelle und Datenverträge in `Modell` ablegen.
 - DDD-Grenzen und Projektabhängigkeiten knapp dokumentieren.
 
 ## Akzeptanzkriterien

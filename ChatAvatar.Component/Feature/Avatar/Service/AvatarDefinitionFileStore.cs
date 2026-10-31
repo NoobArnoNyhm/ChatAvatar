@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using ChatAvatar.Component.Feature.Avatar.Modell;
 
 namespace ChatAvatar.Component.Feature.Avatar.Service;
 

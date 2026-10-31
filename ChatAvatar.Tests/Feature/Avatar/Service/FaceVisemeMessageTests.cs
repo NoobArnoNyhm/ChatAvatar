@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ChatAvatar.Component.Feature.Avatar.Service;
 using ChatAvatar.Component.UI;
+using ChatAvatar.Component.Feature.Avatar.Modell;
 
 namespace ChatAvatar.Tests.Feature.Avatar.Service;
 

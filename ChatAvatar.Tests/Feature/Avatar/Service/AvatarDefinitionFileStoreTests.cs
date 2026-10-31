@@ -1,4 +1,5 @@
 using System.Text.Json;
+using ChatAvatar.Component.Feature.Avatar.Modell;
 using ChatAvatar.Component.Feature.Avatar.Service;
 
 namespace ChatAvatar.Tests.Feature.Avatar.Service;

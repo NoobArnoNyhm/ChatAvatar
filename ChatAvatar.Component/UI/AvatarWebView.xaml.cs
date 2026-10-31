@@ -5,8 +5,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Controls;
-using ChatAvatar.Component.Feature.Avatar.Service;
 using Microsoft.Web.WebView2.Core;
+using ChatAvatar.Component.Feature.Avatar.Modell;
+using ChatAvatar.Component.Feature.Avatar.Service;
 
 namespace ChatAvatar.Component.UI;
 

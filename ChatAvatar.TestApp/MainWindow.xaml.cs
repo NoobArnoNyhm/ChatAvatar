@@ -4,8 +4,17 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.ComponentModel;
-using ChatAvatar.Component.Feature.Avatar.Service;
 using ChatAvatar.Component.UI;
+using ChatAvatar.Component.Feature.AudioPlayback.Modell;
+using ChatAvatar.Component.Feature.AudioPlayback.Service;
+using ChatAvatar.Component.Feature.Avatar.Modell;
+using ChatAvatar.Component.Feature.Avatar.Service;
+using ChatAvatar.Component.Feature.AvatarResponse.Modell;
+using ChatAvatar.Component.Feature.AvatarResponse.Service;
+using ChatAvatar.Component.Feature.SpeechAnimation.Modell;
+using ChatAvatar.Component.Feature.SpeechAnimation.Service;
+using ChatAvatar.Component.Feature.SpeechSynthesis.Modell;
+using ChatAvatar.Component.Feature.SpeechSynthesis.Service;
 
 namespace ChatAvatar.TestApp;
 

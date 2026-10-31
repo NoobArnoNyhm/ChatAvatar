@@ -7,7 +7,8 @@ Diese Kriterien gelten für alle Features und deren Umsetzung im Projekt.
 - [ ] Die Anwendung wird mit **.NET 10** umgesetzt.
 - [ ] Die Fachlogik wird nach den Prinzipien des **Domain-Driven Design (DDD)** strukturiert; fachliche Modelle und Regeln sind der jeweiligen Domäne zugeordnet.
 - [ ] Features werden unter dem Ordner `Feature` angelegt. Jedes Feature besitzt dort einen eigenen Unterordner, dessen Name dem Feature entspricht.
-- [ ] Zum Feature gehörende Services und Modellklassen werden innerhalb des jeweiligen Feature-Ordners in dessen Unterordner `Service` abgelegt.
+- [ ] Die Struktur lautet `Feature/[Funktionsname]/[Service|Modell]`: Services und Schnittstellen liegen unter `Service`, Fachmodelle und Datenverträge getrennt unter `Modell`.
+- [ ] Namespaces entsprechen dem Funktions- und Typordner der jeweiligen Datei.
 - [ ] Die Benutzeroberfläche wird getrennt von den Features im eigenen Ordner `UI` implementiert.
 
 ## Tests
