@@ -4,6 +4,6 @@ public interface ISpeechSynthesisEngine
 {
     Task<SpeechSynthesisResult> SynthesizeAsync(
         string text,
-        string? voiceName,
+        AvatarResponseSettings settings,
         CancellationToken cancellationToken = default);
 }

@@ -17,10 +17,11 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
 
     public async Task<SpeechSynthesisResult> SynthesizeAsync(
         string text,
-        string? voiceName,
+        AvatarResponseSettings settings,
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(text);
+        ArgumentNullException.ThrowIfNull(settings);
         cancellationToken.ThrowIfCancellationRequested();
 
         var synthesizer = new SpeechSynthesizer();
@@ -52,11 +53,13 @@ public sealed class SystemSpeechSynthesisEngine : ISpeechSynthesisEngine
 
         try
         {
-            if (!string.IsNullOrWhiteSpace(voiceName))
+            if (!string.IsNullOrWhiteSpace(settings.VoiceName))
             {
-                synthesizer.SelectVoice(voiceName);
+                synthesizer.SelectVoice(settings.VoiceName);
             }
 
+            synthesizer.Volume = settings.Volume;
+            synthesizer.Rate = settings.Rate;
             synthesizer.SetOutputToWaveStream(output);
             using var cancellationRegistration = cancellationToken.Register(synthesizer.SpeakAsyncCancelAll);
             cancellationToken.ThrowIfCancellationRequested();

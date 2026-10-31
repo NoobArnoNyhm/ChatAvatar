@@ -11,12 +11,16 @@ public sealed class SpeechSynthesisServiceTests
     {
         var engine = new FakeSpeechSynthesisEngine();
         var service = new SpeechSynthesisService(engine);
-        var request = new AvatarResponseRequest("Hello", new AvatarResponseSettings("Local Voice"));
+        var settings = new AvatarResponseSettings("Local Voice", volume: 65, rate: 2);
+        var request = new AvatarResponseRequest("Hello", settings);
 
         var result = await service.SynthesizeAsync(request);
 
         Assert.AreEqual("Hello", engine.LastText);
-        Assert.AreEqual("Local Voice", engine.LastVoiceName);
+        Assert.AreSame(settings, engine.LastSettings);
+        Assert.AreEqual("Local Voice", engine.LastSettings?.VoiceName);
+        Assert.AreEqual(65, engine.LastSettings?.Volume);
+        Assert.AreEqual(2, engine.LastSettings?.Rate);
         Assert.AreEqual(4, result.AudioStream.Length);
         Assert.AreSame(SpeechAnimationTrack.Empty, result.AnimationTrack);
         await result.AudioStream.DisposeAsync();
@@ -61,7 +65,7 @@ public sealed class SpeechSynthesisServiceTests
             Assert.Inconclusive("No local System.Speech voice is installed.");
         }
 
-        var result = await engine.SynthesizeAsync("Test speech", voices[0]);
+        var result = await engine.SynthesizeAsync("Test speech", new AvatarResponseSettings(voiceName: voices[0]));
         await using var stream = result.AudioStream;
         var header = new byte[4];
         var bytesRead = await stream.ReadAsync(header);
@@ -75,17 +79,17 @@ public sealed class SpeechSynthesisServiceTests
     {
         public string? LastText { get; private set; }
 
-        public string? LastVoiceName { get; private set; }
+        public AvatarResponseSettings? LastSettings { get; private set; }
 
         public Exception? Failure { get; init; }
 
         public Task<SpeechSynthesisResult> SynthesizeAsync(
             string text,
-            string? voiceName,
+            AvatarResponseSettings settings,
             CancellationToken cancellationToken = default)
         {
             LastText = text;
-            LastVoiceName = voiceName;
+            LastSettings = settings;
 
             if (Failure is not null)
             {

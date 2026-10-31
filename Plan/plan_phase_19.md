@@ -16,8 +16,8 @@ Phasen 03 und 07.
 
 ## Akzeptanzkriterien
 
-- [ ] Der Host kann Einstellungen beim Initialisieren übergeben.
-- [ ] Das Fenster zeigt und validiert die unterstützten Einstellungen.
-- [ ] Änderungen werden an den Host zurückgegeben; die Komponente schreibt keine Anwendungseinstellungen auf Datenträger.
-- [ ] Tests prüfen Übergabe, Rückgabe und Validierung.
-- [ ] Der Vertrag ist in der `README.md` dokumentiert.
+- [x] Der Host kann Stimme, Avatar-ID, Lautstärke und Sprechtempo typisiert über `AvatarResponseSettings` übergeben.
+- [x] Das Einstellungsfenster zeigt hostgelieferte Stimmen und validiert die Wertebereiche.
+- [x] Übernehmen gibt Einstellungen zurück, Abbrechen liefert kein Ergebnis; die Komponente speichert sie nicht.
+- [x] Tests prüfen Standardwerte, Übergabe und Wertebereichsvalidierung.
+- [x] Host-Verantwortung und API-Vertrag sind in der `README.md` dokumentiert.

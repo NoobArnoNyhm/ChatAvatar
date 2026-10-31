@@ -82,7 +82,9 @@ public sealed class SpeechAnimationTrackTests
             Assert.Inconclusive("No local System.Speech voice is installed.");
         }
 
-        var result = await engine.SynthesizeAsync("Hello avatar", voices[0]);
+        var result = await engine.SynthesizeAsync(
+            "Hello avatar",
+            new AvatarResponseSettings(voiceName: voices[0]));
         await using var stream = result.AudioStream;
         var audioLevelAnalyzer = new WaveAudioLevelAnalyzer(stream);
 

@@ -19,7 +19,7 @@ public sealed class SpeechSynthesisService : ISpeechSynthesisService
 
         return _engine.SynthesizeAsync(
             request.Text,
-            request.Settings.VoiceName,
+            request.Settings,
             cancellationToken);
     }
 }
