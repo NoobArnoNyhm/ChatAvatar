@@ -19,5 +19,5 @@ Phase 01.
 - [x] Jeder Avatar hat eine eindeutige Identität und genau einen unterstützten Typ.
 - [x] Ungültige Identitäten, Namen, typbezogene Werte und nicht unterstützte Schema-Versionen werden kontrolliert abgewiesen.
 - [x] Das JSON-Dateiformat ist versioniert und mit einem Beispiel dokumentiert.
-- [x] Fachregeln liegen im passenden Feature unter `Featur` und sind automatisiert getestet.
+- [x] Fachregeln liegen im passenden Feature unter `Feature` und sind automatisiert getestet.
 - [x] Das Modell und Format sind in der `README.md` dokumentiert.

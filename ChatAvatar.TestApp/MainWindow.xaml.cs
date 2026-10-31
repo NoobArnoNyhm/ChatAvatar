@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.ComponentModel;
-using ChatAvatar.Component.Featur.Avatar.Service;
+using ChatAvatar.Component.Feature.Avatar.Service;
 using ChatAvatar.Component.UI;
 
 namespace ChatAvatar.TestApp;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using ChatAvatar.Component.Featur.Avatar.Service;
+using ChatAvatar.Component.Feature.Avatar.Service;
 
 namespace ChatAvatar.Component.UI;
 

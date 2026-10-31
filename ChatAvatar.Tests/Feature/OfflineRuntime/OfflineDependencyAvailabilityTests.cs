@@ -1,0 +1,32 @@
+using Microsoft.Web.WebView2.Core;
+using System.Speech.Synthesis;
+
+namespace ChatAvatar.Tests.Feature.OfflineRuntime;
+
+[TestClass]
+public sealed class OfflineDependencyAvailabilityTests
+{
+    [TestMethod]
+    public void WebView2SdkAssemblyIsAvailableLocally()
+    {
+        Assert.AreEqual("Microsoft.Web.WebView2.Core", typeof(CoreWebView2Environment).Assembly.GetName().Name);
+    }
+
+    [TestMethod]
+    public void SystemSpeechAssemblyIsAvailableLocally()
+    {
+        Assert.AreEqual("System.Speech", typeof(SpeechSynthesizer).Assembly.GetName().Name);
+    }
+
+    [TestMethod]
+    public void ThreeJsModuleIsCopiedAsALocalRuntimeAsset()
+    {
+        var modulePath = Path.Combine(AppContext.BaseDirectory, "Assets", "ThreeJs", "three.module.js");
+        var corePath = Path.Combine(AppContext.BaseDirectory, "Assets", "ThreeJs", "three.core.js");
+
+        Assert.IsTrue(File.Exists(modulePath), $"Expected local Three.js module at {modulePath}.");
+        Assert.IsGreaterThan(100_000, new FileInfo(modulePath).Length);
+        Assert.IsTrue(File.Exists(corePath), $"Expected local Three.js core module at {corePath}.");
+        Assert.IsGreaterThan(100_000, new FileInfo(corePath).Length);
+    }
+}

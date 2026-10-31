@@ -1,6 +1,6 @@
 using System.IO;
 using System.Text.Json;
-using ChatAvatar.Component.Featur.Avatar.Service;
+using ChatAvatar.Component.Feature.Avatar.Service;
 
 namespace ChatAvatar.TestApp;
 
