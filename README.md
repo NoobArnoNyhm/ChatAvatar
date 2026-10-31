@@ -95,6 +95,8 @@ Die Bildstil-Variante ist eine eigenständige 3D-Komposition aus extrudierter Me
 
 Der abstrakte Avatar besteht aus einer 3D-Hülle, einem Ring, einer Lichtkugel und einem `PointLight`. `WaveAudioLevelAnalyzer` berechnet den normalisierten RMS-Pegel aus WAV-PCM- oder IEEE-Float-Samples; der Playback-Frame liefert ihn zusammen mit Text und Visemen. Über `SetAudioLevelAsync` steuert dieser Pegel das Leuchten. Bei Stille oder nach dem Reset bleibt das Licht im neutralen Ruhezustand.
 
+`AvatarRuntimeService.SelectAsync` lädt eine Avatar-Datei anhand ihrer ID aus dem vom Host übergebenen Verzeichnis und aktiviert den zugehörigen Darstellungsmodus über `IAvatarRenderer`. `AvatarWebView` implementiert diesen Renderer. Die aktuelle Auswahl wird erst übernommen, wenn Laden und Renderer-Aufruf erfolgreich waren; fehlende oder doppelte IDs sowie Rendererfehler lassen die bisherige Auswahl unangetastet.
+
 ## Sprachsynthese
 
 `SpeechSynthesisService` nimmt eine `AvatarResponseRequest` entgegen und leitet Text sowie den vom Host angegebenen Stimmennamen an `SystemSpeechSynthesisEngine` weiter. Das Ergebnis enthält einen WAV-MemoryStream und einen zeitgeordneten Animations-Track aus `PhonemeReached`- und `VisemeReached`-Ereignissen. Die Zeitwerte beziehen sich auf die Audioausgabe; ein Track kann leer sein, wenn eine Stimme keine entsprechenden Ereignisse liefert. Der Aufrufer besitzt und entsorgt den zurückgegebenen Stream. Abbruch wird an `SpeechSynthesizer` weitergereicht und Fehler werden als Fehler des Synthesevorgangs zurückgegeben. System.Speech nutzt die auf dem Windows-System lokal installierten SAPI-Stimmen; es lädt selbst keine Sprachdienste online. Verfügbarkeit und Klang hängen von den lokal installierten Stimmen ab.

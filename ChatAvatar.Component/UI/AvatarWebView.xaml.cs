@@ -9,7 +9,7 @@ using Microsoft.Web.WebView2.Core;
 
 namespace ChatAvatar.Component.UI;
 
-public partial class AvatarWebView : UserControl
+public partial class AvatarWebView : UserControl, IAvatarRenderer
 {
     private const string VirtualHostName = "chatavatar.local";
     private static readonly JsonSerializerOptions MessageSerializerOptions = new()

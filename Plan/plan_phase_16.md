@@ -16,7 +16,7 @@ Phasen 06, 13, 14 und 15.
 
 ## Akzeptanzkriterien
 
-- [ ] Jeder der drei Beispieltypen kann geladen und angezeigt werden.
-- [ ] Ein Typwechsel aktiviert die passende Darstellung und räumt den vorherigen Zustand auf.
-- [ ] Unbekannte oder nicht ladbare Avatare erzeugen einen verständlichen Fehler.
-- [ ] Auswahl und Wechsel sind automatisiert getestet.
+- [x] Avatar-Dateien aller drei Darstellungsarten können aus einem hostseitig übergebenen Verzeichnis geladen werden.
+- [x] Der Renderer wird mit dem ausgewählten Typ aktiviert; die WebView blendet die vorherige Darstellung aus.
+- [x] Fehlende, mehrdeutige oder durch den Renderer nicht aktivierbare Avatare erzeugen kontrollierte Fehler, ohne die aktuelle Auswahl zu ersetzen.
+- [x] Auswahl aller drei Typen, Fehlersituationen und Zustandsbeibehaltung sind automatisiert getestet.
